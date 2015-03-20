@@ -7,7 +7,7 @@
     <authors>$author$</authors>
     <owners>$author$</owners>
     <licenseUrl>https://raw.githubusercontent.com/monoman/managed-commons-core/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/monoman/managed-commons-core</projectUrl>
+    <projectUrl>https://github.com/managed-commons/managed-commons-core/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>Totally In flux! Don't use this yet!</releaseNotes>
