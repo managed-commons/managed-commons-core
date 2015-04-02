@@ -7,6 +7,6 @@ Commons.GetOptions.sln.ide/
 test-results/
 TestResult.xml
 *.VisualState.xml
-
 *.user
 *.nupkg
+/Commons.Core.sln.ide
