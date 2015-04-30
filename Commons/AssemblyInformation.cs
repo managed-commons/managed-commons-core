@@ -22,11 +22,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Console;
 using System.Linq;
 using System.Reflection;
 using Commons.Reflection;
-using Commons.Translation.TranslationService;
+using static System.Console;
+using static Commons.Translation.TranslationService;
 
 namespace Commons
 {
