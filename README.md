@@ -1,6 +1,6 @@
 Commons.Core
 ==================
-
+[![Mono Build Status](https://travis-ci.org/managed-commons/managed-commons-core.svg?branch=master)](https://travis-ci.org/managed-commons/managed-commons-core)
 ----------
 
 Managed Commons core library for assembly metadata and translation services.
