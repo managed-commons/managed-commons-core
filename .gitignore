@@ -10,3 +10,4 @@ TestResult.xml
 *.user
 *.nupkg
 /Commons.Core.sln.ide
+*.exe

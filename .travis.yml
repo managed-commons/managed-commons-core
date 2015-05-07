@@ -1,5 +1,4 @@
 language: csharp
 sudo: false  # use the new container-based infrastructure
-install: alias nuget='mono nuget.exe' && curl -sSL https://nuget.org/nuget.exe > nuget.exe
 script:
   - . ./build.sh
