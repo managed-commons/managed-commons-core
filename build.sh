@@ -1,3 +1,2 @@
 #!/bin/bash
-echo === Verifying nuget existence: && nuget && echo === Starting build... && \
-xbuild Commons.Core.csproj
+xbuild /property:DoNotPack=true Commons.Core.csproj && nuget pack Commons.Core.csproj

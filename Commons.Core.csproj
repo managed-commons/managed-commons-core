@@ -59,15 +59,12 @@
     <None Include="LICENSE" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>cd $(ProjectDir)
-nuget pack $(ProjectFileName)</PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
   -->
+  <Target Name="AfterBuild">
+    <Exec Command="nuget pack $(ProjectFileName)" WorkingDirectory="$(ProjectDir)"  Condition="$(DoNotPack)==''" />
+  </Target>
 </Project>
