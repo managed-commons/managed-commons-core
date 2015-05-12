@@ -25,17 +25,19 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using Commons;
 
-[assembly: AssemblyTitle("Commons.Core")]
-[assembly: AssemblyDescription("Core meta-information library")]
-[assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Rafael 'Monoman' Teixeira, Managed Commons Team")]
+[assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCopyright("Copyright ©2002-2015 Rafael 'Monoman' Teixeira, Managed Commons Team")]
-[assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: CLSCompliant(false)]
-[assembly: AssemblyVersion("1.0.0")]
-[assembly: AssemblyFileVersion("1.0.0")]
+[assembly: AssemblyDescription("Core meta-information library")]
 [assembly: AssemblyProduct("Managed.Commons.Core")]
-[assembly: AssemblyInformationalVersion("1.0.0")]
+[assembly: AssemblyTitle("Commons.Core")]
+[assembly: AssemblyTrademark("")]
+[assembly: CLSCompliant(false)]
 [assembly: ComVisible(false)]
+
+[assembly: AssemblyVersion("1.1.0")]
+[assembly: AssemblyFileVersion("1.1.0")]
+[assembly: AssemblyInformationalVersion("1.1.0-Alpha")]
+
 [assembly: License(LicenseType.MIT)]

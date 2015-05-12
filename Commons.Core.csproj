@@ -68,6 +68,6 @@
   </Target>
   -->
   <Target Name="AfterBuild">
-    <Exec Command="nuget pack $(ProjectFileName)" WorkingDirectory="$(ProjectDir)" Condition="$(DoNotPack)==''" />
+    <Exec Command="nuget pack $(ProjectFileName) -Symbols" WorkingDirectory="$(ProjectDir)" Condition="$(DoNotPack)==''" />
   </Target>
 </Project>

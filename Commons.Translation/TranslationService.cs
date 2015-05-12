@@ -26,119 +26,122 @@ using System.Threading;
 
 namespace Commons.Translation
 {
-	public static class TranslationService
-	{
-		public static string _(string textToTranslate)
-		{
-			var context = Assembly.GetCallingAssembly().FullName;
-			return InnerTranslate(Thread.CurrentThread.CurrentCulture.Name, textToTranslate, context);
-		}
+    public static class TranslationService
+    {
+        private static TranslatorInChain _chain = null;
 
-		public static string _Format(string textToTranslate, params object[] args)
-		{
-			var context = Assembly.GetCallingAssembly().FullName;
-			return string.Format(
-				InnerTranslate(Thread.CurrentThread.CurrentCulture.Name, textToTranslate, context),
-				args);
-		}
+        private static string _locale;
 
-		public static string _Plural(string singular, string plural, int quantity)
-		{
-			var context = Assembly.GetCallingAssembly().FullName;
-			return InnerTranslatePlural(Thread.CurrentThread.CurrentCulture.Name, singular, plural, quantity, context);
-		}
+        public static string Locale { get { return _locale ?? Thread.CurrentThread.CurrentCulture.Name; } set { _locale = value; } }
 
-		public static void RegisterTranslator(ITranslator translator)
-		{
-			if (translator == null)
-				throw new ArgumentNullException(nameof(translator));
-			var context = Assembly.GetCallingAssembly().FullName;
-			_chain = new TranslatorInChain(context, translator, _chain);
-		}
+        public static string _(string textToTranslate)
+        {
+            var context = Assembly.GetCallingAssembly().FullName;
+            return InnerTranslate(Locale, textToTranslate, context);
+        }
 
-		public static string Translate(string locale, string textToTranslate)
-		{
-			if (locale == null)
-				throw new ArgumentNullException(nameof(locale));
-			var context = Assembly.GetCallingAssembly().FullName;
-			return InnerTranslate(locale, textToTranslate, context);
-		}
+        public static string _Format(string textToTranslate, params object[] args)
+        {
+            var context = Assembly.GetCallingAssembly().FullName;
+            return string.Format(InnerTranslate(Locale, textToTranslate, context), args);
+        }
 
-		public static string TranslateAndFormat(string locale, string textToTranslate, params object[] args)
-		{
-			if (locale == null)
-				throw new ArgumentNullException(nameof(locale));
-			var context = Assembly.GetCallingAssembly().FullName;
-			return string.Format(
-				InnerTranslate(locale, textToTranslate, context),
-				args);
-		}
+        public static string _Plural(string singular, string plural, int quantity)
+        {
+            var context = Assembly.GetCallingAssembly().FullName;
+            return InnerTranslatePlural(Locale, singular, plural, quantity, context);
+        }
 
-		public static string TranslatePlural(string locale, string singular, string plural, int quantity)
-		{
-			if (locale == null)
-				throw new ArgumentNullException(nameof(locale));
-			var context = Assembly.GetCallingAssembly().FullName;
-			return InnerTranslatePlural(locale, singular, plural, quantity, context);
-		}
+        public static void RegisterTranslator(ITranslator translator)
+        {
+            if (translator == null)
+                throw new ArgumentNullException(nameof(translator));
+            var context = Assembly.GetCallingAssembly().FullName;
+            _chain = new TranslatorInChain(context, translator, _chain);
+        }
 
-		private static TranslatorInChain _chain = null;
+        public static string Translate(string locale, string textToTranslate)
+        {
+            if (locale == null)
+                throw new ArgumentNullException(nameof(locale));
+            var context = Assembly.GetCallingAssembly().FullName;
+            return InnerTranslate(locale, textToTranslate, context);
+        }
 
-		private static string FindAndTranslate(Func<TranslatorInChain, string> use, string context)
-		{
-			var translator = _chain;
-			while (translator != null && (context == "*" || translator.Context == context)) {
-				var result = use(translator);
-				if (result != null)
-					return result;
-				translator = translator.Next;
-			}
-			return (context != "*") ? FindAndTranslate(use, "*") : null;
-		}
+        public static string TranslateAndFormat(string locale, string textToTranslate, params object[] args)
+        {
+            if (locale == null)
+                throw new ArgumentNullException(nameof(locale));
+            var context = Assembly.GetCallingAssembly().FullName;
+            return string.Format(
+                InnerTranslate(locale, textToTranslate, context),
+                args);
+        }
 
-		private static string InnerTranslate(string locale, string textToTranslate, string context)
-		{
-			if (textToTranslate == null)
-				throw new ArgumentNullException(nameof(textToTranslate));
-			return FindAndTranslate((tr) => tr.Translate(locale, textToTranslate), context)
-				?? textToTranslate;
-		}
+        public static string TranslatePlural(string locale, string singular, string plural, int quantity)
+        {
+            if (locale == null)
+                throw new ArgumentNullException(nameof(locale));
+            var context = Assembly.GetCallingAssembly().FullName;
+            return InnerTranslatePlural(locale, singular, plural, quantity, context);
+        }
 
-		private static string InnerTranslatePlural(string locale, string singular, string plural, int quantity, string context)
-		{
-			if (singular == null)
-				throw new ArgumentNullException(nameof(singular));
-			if (plural == null)
-				throw new ArgumentNullException(nameof(plural));
-			if (quantity < 1)
-				throw new ArgumentOutOfRangeException(nameof(quantity));
-			return FindAndTranslate((tr) => tr.TranslatePlural(locale, singular, plural, quantity), context)
-				?? ((quantity == 1) ? singular : plural);
-		}
+        private static string FindAndTranslate(Func<TranslatorInChain, string> use, string context)
+        {
+            var translator = _chain;
+            while (translator != null && (context == "*" || translator.Context == context))
+            {
+                var result = use(translator);
+                if (result != null)
+                    return result;
+                translator = translator.Next;
+            }
+            return (context != "*") ? FindAndTranslate(use, "*") : null;
+        }
 
-		private class TranslatorInChain : ITranslator
-		{
-			public readonly string Context;
-			public readonly TranslatorInChain Next;
+        private static string InnerTranslate(string locale, string textToTranslate, string context)
+        {
+            if (textToTranslate == null)
+                throw new ArgumentNullException(nameof(textToTranslate));
+            return FindAndTranslate((tr) => tr.Translate(locale, textToTranslate), context)
+                ?? textToTranslate;
+        }
 
-			public TranslatorInChain(string context, ITranslator translator, TranslatorInChain next)
-			{
-				Context = context;
-				_translator = translator;
-				Next = next;
-			}
+        private static string InnerTranslatePlural(string locale, string singular, string plural, int quantity, string context)
+        {
+            if (singular == null)
+                throw new ArgumentNullException(nameof(singular));
+            if (plural == null)
+                throw new ArgumentNullException(nameof(plural));
+            if (quantity < 1)
+                throw new ArgumentOutOfRangeException(nameof(quantity));
+            return FindAndTranslate((tr) => tr.TranslatePlural(locale, singular, plural, quantity), context)
+                ?? ((quantity == 1) ? singular : plural);
+        }
 
-			public string Translate(string locale, string textToTranslate)
-			{
-				return _translator.Translate(locale, textToTranslate);
-			}
+        private class TranslatorInChain : ITranslator
+        {
+            public readonly string Context;
+            public readonly TranslatorInChain Next;
 
-			public string TranslatePlural(string locale, string singular, string plural, int quantity)
-			{
-				return _translator.TranslatePlural(locale, singular, plural, quantity);
-			}
+            private readonly ITranslator _translator;
 
-			private readonly ITranslator _translator;
-		}
-	}
+            public TranslatorInChain(string context, ITranslator translator, TranslatorInChain next)
+            {
+                Context = context;
+                _translator = translator;
+                Next = next;
+            }
+
+            public string Translate(string locale, string textToTranslate)
+            {
+                return _translator.Translate(locale, textToTranslate);
+            }
+
+            public string TranslatePlural(string locale, string singular, string plural, int quantity)
+            {
+                return _translator.TranslatePlural(locale, singular, plural, quantity);
+            }
+        }
+    }
 }
