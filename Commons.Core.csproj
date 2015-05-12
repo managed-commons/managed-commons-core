@@ -68,6 +68,10 @@
   </Target>
   -->
   <Target Name="AfterBuild">
+    <ItemGroup>
+      <OldPackages Include="*.nupkg"/>
+    </ItemGroup>
+    <Delete Files="@(OldPackages)" />
     <Exec Command="nuget pack $(ProjectFileName) -Symbols" WorkingDirectory="$(ProjectDir)" Condition="$(DoNotPack)==''" />
   </Target>
 </Project>
