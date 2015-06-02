@@ -21,22 +21,26 @@
 // SOFTWARE.
 
 using System;
+using Commons.Translation;
+using static Commons.Translation.TranslationService;
 
 namespace Commons
 {
-	[AttributeUsage(AttributeTargets.Assembly)]
-	public sealed class AdditionalInfoAttribute : Attribute
-	{
-		public AdditionalInfoAttribute(string info)
-		{
-			Info = info;
-		}
+    [AttributeUsage(AttributeTargets.Assembly)]
+    public sealed class AdditionalInfoAttribute : Attribute
+    {
+        public AdditionalInfoAttribute([Translatable]string info)
+        {
+            Info = info;
+        }
 
-		public string Info { get; private set; }
+        public string Info { get; private set; }
 
-		public override string ToString()
-		{
-			return Info;
-		}
-	}
+        public string TranslatedInfo { get { return _(Info); } }
+
+        public override string ToString()
+        {
+            return TranslatedInfo;
+        }
+    }
 }

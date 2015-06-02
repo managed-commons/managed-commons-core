@@ -45,6 +45,7 @@
     <Compile Include="Assembly\AssemblyInfo.cs" />
     <Compile Include="Commons.Translation\DictionaryTranslator.cs" />
     <Compile Include="Commons.Translation\ITranslator.cs" />
+    <Compile Include="Commons.Translation\TranslatableAttribute.cs" />
     <Compile Include="Commons\AboutAttribute.cs" />
     <Compile Include="Commons\AdditionalInfoAttribute.cs" />
     <Compile Include="Commons.Reflection\AssemblyExtensions.cs" />
@@ -69,7 +70,7 @@
   -->
   <Target Name="AfterBuild">
     <ItemGroup>
-      <OldPackages Include="*.nupkg"/>
+      <OldPackages Include="*.nupkg" />
     </ItemGroup>
     <Delete Files="@(OldPackages)" />
     <Exec Command="nuget pack $(ProjectFileName) -Symbols" WorkingDirectory="$(ProjectDir)" Condition="$(DoNotPack)==''" />

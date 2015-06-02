@@ -34,19 +34,19 @@ namespace Commons.Translation
 
         public static string Locale { get { return _locale ?? Thread.CurrentThread.CurrentCulture.Name; } set { _locale = value; } }
 
-        public static string _(string textToTranslate)
+        public static string _([Translatable] string textToTranslate)
         {
             var context = Assembly.GetCallingAssembly().FullName;
             return InnerTranslate(Locale, textToTranslate, context);
         }
 
-        public static string _Format(string textToTranslate, params object[] args)
+        public static string _Format([Translatable] string textToTranslate, params object[] args)
         {
             var context = Assembly.GetCallingAssembly().FullName;
             return string.Format(InnerTranslate(Locale, textToTranslate, context), args);
         }
 
-        public static string _Plural(string singular, string plural, int quantity)
+        public static string _Plural([Translatable] string singular, [Translatable] string plural, int quantity)
         {
             var context = Assembly.GetCallingAssembly().FullName;
             return InnerTranslatePlural(Locale, singular, plural, quantity, context);
@@ -60,7 +60,7 @@ namespace Commons.Translation
             _chain = new TranslatorInChain(context, translator, _chain);
         }
 
-        public static string Translate(string locale, string textToTranslate)
+        public static string Translate(string locale, [Translatable] string textToTranslate)
         {
             if (locale == null)
                 throw new ArgumentNullException(nameof(locale));
@@ -68,7 +68,7 @@ namespace Commons.Translation
             return InnerTranslate(locale, textToTranslate, context);
         }
 
-        public static string TranslateAndFormat(string locale, string textToTranslate, params object[] args)
+        public static string TranslateAndFormat(string locale, [Translatable] string textToTranslate, params object[] args)
         {
             if (locale == null)
                 throw new ArgumentNullException(nameof(locale));
@@ -78,7 +78,7 @@ namespace Commons.Translation
                 args);
         }
 
-        public static string TranslatePlural(string locale, string singular, string plural, int quantity)
+        public static string TranslatePlural(string locale, [Translatable] string singular, [Translatable] string plural, int quantity)
         {
             if (locale == null)
                 throw new ArgumentNullException(nameof(locale));

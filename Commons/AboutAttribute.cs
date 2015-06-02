@@ -19,23 +19,28 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
+
 using System;
+using Commons.Translation;
+using static Commons.Translation.TranslationService;
 
 namespace Commons
 {
-	[AttributeUsage(AttributeTargets.Assembly)]
-	public sealed class AboutAttribute : Attribute
-	{
-		public AboutAttribute(string details)
-		{
-			Details = details;
-		}
+    [AttributeUsage(AttributeTargets.Assembly)]
+    public sealed class AboutAttribute : Attribute
+    {
+        public AboutAttribute([Translatable] string details)
+        {
+            Details = details;
+        }
 
-		public string Details { get; private set; }
+        public string Details { get; private set; }
 
-		public override string ToString()
-		{
-			return Details;
-		}
-	}
+        public string TranslatedDetails {  get { return _(Details); } }
+
+        public override string ToString()
+        {
+            return TranslatedDetails;
+        }
+    }
 }
