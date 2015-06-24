@@ -5,6 +5,17 @@ VisualStudioVersion = 14.0.22823.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commons.Core", "Commons.Core.csproj", "{9FD82B7E-A718-4266-BCEF-2F987E374BBB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unit.Commons.Core", "Test\unit.managed.commons.core\Unit.Commons.Core.csproj", "{78D0CDDC-2098-4058-8D82-6E4337A51ED0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configurations", "Configurations", "{4CCF9BBD-4014-4C42-BB22-A95121199869}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		.travis.yml = .travis.yml
+		build.sh = build.sh
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +26,10 @@ Global
 		{9FD82B7E-A718-4266-BCEF-2F987E374BBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9FD82B7E-A718-4266-BCEF-2F987E374BBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9FD82B7E-A718-4266-BCEF-2F987E374BBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78D0CDDC-2098-4058-8D82-6E4337A51ED0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78D0CDDC-2098-4058-8D82-6E4337A51ED0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78D0CDDC-2098-4058-8D82-6E4337A51ED0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78D0CDDC-2098-4058-8D82-6E4337A51ED0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

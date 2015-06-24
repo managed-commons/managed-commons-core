@@ -21,6 +21,7 @@
 // SOFTWARE.
 
 using System;
+using System.Globalization;
 using System.Reflection;
 using System.Threading;
 
@@ -32,7 +33,7 @@ namespace Commons.Translation
 
         private static string _locale;
 
-        public static string Locale { get { return _locale ?? Thread.CurrentThread.CurrentCulture.Name; } set { _locale = value; } }
+        public static string Locale { get { return _locale ?? Thread.CurrentThread.CurrentCulture.Name; } set { _locale = CultureInfo.GetCultureInfo(value).Name; } }
 
         public static string _([Translatable] string textToTranslate)
         {
@@ -40,10 +41,16 @@ namespace Commons.Translation
             return InnerTranslate(Locale, textToTranslate, context);
         }
 
+        public static string __([Translatable] FormattableString textToTranslate)
+        {
+            var context = Assembly.GetCallingAssembly().FullName;
+            return InnerFormat(Locale, textToTranslate.Format, textToTranslate.GetArguments(), context);
+        }
+
         public static string _Format([Translatable] string textToTranslate, params object[] args)
         {
             var context = Assembly.GetCallingAssembly().FullName;
-            return string.Format(InnerTranslate(Locale, textToTranslate, context), args);
+            return InnerFormat(_locale, textToTranslate, args, context);
         }
 
         public static string _Plural([Translatable] string singular, [Translatable] string plural, int quantity)
@@ -70,12 +77,8 @@ namespace Commons.Translation
 
         public static string TranslateAndFormat(string locale, [Translatable] string textToTranslate, params object[] args)
         {
-            if (locale == null)
-                throw new ArgumentNullException(nameof(locale));
             var context = Assembly.GetCallingAssembly().FullName;
-            return string.Format(
-                InnerTranslate(locale, textToTranslate, context),
-                args);
+            return InnerFormat(locale, textToTranslate, args, context);
         }
 
         public static string TranslatePlural(string locale, [Translatable] string singular, [Translatable] string plural, int quantity)
@@ -99,10 +102,19 @@ namespace Commons.Translation
             return (context != "*") ? FindAndTranslate(use, "*") : null;
         }
 
+        private static string InnerFormat(string locale, string textToTranslate, object[] args, string context)
+        {
+            if (locale == null)
+                throw new ArgumentNullException(nameof(locale));
+            if (string.IsNullOrWhiteSpace(textToTranslate))
+                return textToTranslate;
+            return string.Format(CultureInfo.GetCultureInfo(locale), InnerTranslate(locale, textToTranslate, context), args);
+        }
+
         private static string InnerTranslate(string locale, string textToTranslate, string context)
         {
-            if (textToTranslate == null)
-                throw new ArgumentNullException(nameof(textToTranslate));
+            if (string.IsNullOrWhiteSpace(textToTranslate))
+                return textToTranslate;
             return FindAndTranslate((tr) => tr.Translate(locale, textToTranslate), context)
                 ?? textToTranslate;
         }

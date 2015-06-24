@@ -11,3 +11,4 @@ TestResult.xml
 *.nupkg
 /Commons.Core.sln.ide
 *.exe
+packages/
