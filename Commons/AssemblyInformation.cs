@@ -24,112 +24,152 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using Commons.Reflection;
-using static System.Console;
 using static Commons.Translation.TranslationService;
 
 namespace Commons
 {
-	public class AssemblyInformation
-	{
-		public AssemblyInformation(Assembly assembly)
-		{
-			ExeName = assembly.GetName().Name;
-			Version = assembly.GetVersion();
-			Title = assembly.GetAssemblyAttributeValueAsString<AssemblyTitleAttribute>(a => a.Title);
-			Copyright = assembly.GetAssemblyAttributeValueAsString<AssemblyCopyrightAttribute>(a => a.Copyright);
-			Description = assembly.GetAssemblyAttributeValueAsString<AssemblyDescriptionAttribute>(a => a.Description);
-			AboutDetails = assembly.GetAssemblyAttributeAsString<AboutAttribute>();
-			AdditionalInfo = assembly.GetAssemblyAttributeAsString<AdditionalInfoAttribute>();
-			ReportBugsTo = assembly.GetAssemblyAttributeAsString<ReportBugsToAttribute>();
-			License = assembly.GetAssemblyAttributeAsString<LicenseAttribute>();
-			Authors = GetAuthors(assembly);
-		}
+    public class AssemblyInformation
+    {
+        public AssemblyInformation(Assembly assembly)
+        {
+            ExeName = assembly.GetName().Name;
+            Version = assembly.GetVersion();
+            Title = assembly.GetAssemblyAttributeValueAsString<AssemblyTitleAttribute>(a => a.Title);
+            Copyright = assembly.GetAssemblyAttributeValueAsString<AssemblyCopyrightAttribute>(a => a.Copyright);
+            Description = assembly.GetAssemblyAttributeValueAsString<AssemblyDescriptionAttribute>(a => a.Description);
+            AboutDetails = assembly.GetAssemblyAttributeAsString<AboutAttribute>();
+            AdditionalInfo = assembly.GetAssemblyAttributeAsString<AdditionalInfoAttribute>();
+            ReportBugsTo = assembly.GetAssemblyAttributeAsString<ReportBugsToAttribute>();
+            License = assembly.GetAssemblyAttributeAsString<LicenseAttribute>();
+            Authors = GetAuthors(assembly);
+        }
 
-		public static AssemblyInformation FromEntryAssembly { get { return new AssemblyInformation(Assembly.GetEntryAssembly()); } }
+        public static AssemblyInformation FromEntryAssembly { get { return new AssemblyInformation(Assembly.GetEntryAssembly()); } }
 
-		public string AboutDetails { get; set; }
+        public string AboutDetails { get; set; }
 
-		public string AdditionalBannerInfo { get; set; }
+        public string AdditionalBannerInfo { get; set; }
 
-		public string AdditionalInfo { get; set; }
+        public string AdditionalInfo { get; set; }
 
-		public IEnumerable<string> Authors { get; set; }
+        public IEnumerable<string> Authors { get; set; }
 
-		public string Copyright { get; set; }
+        public string Copyright { get; set; }
 
-		public string Description { get; set; }
+        public string Description { get; set; }
 
-		public string ExeName { get; set; }
+        public string ExeName { get; set; }
 
-		public string License { get; set; }
+        public string License { get; set; }
 
-		public string Product { get; set; }
+        public string Product { get; set; }
 
-		public string ReportBugsTo { get; set; }
+        public string ReportBugsTo { get; set; }
 
-		public string Title { get; set; }
+        public string Title { get; set; }
 
-		public string Version { get; set; }
+        public string Version { get; set; }
 
-		public AssemblyInformation WithDefaults
-		{
-			get
-			{
-				AboutDetails = AboutDetails ?? "Add a [assembly: Commons.About(\"Here goes the short about details\")] to your assembly";
-				Copyright = Copyright ?? string.Format("Add a [assembly: AssemblyCopyright(\"(c){0:0000} Here goes the copyright holder name\")] to your assembly", DateTimeOffset.Now.Year);
-				Description = Description ?? "Add a [assembly: AssemblyDescription(\"Here goes the short description\")] to your assembly";
-				Title = Title ?? "Add a [assembly: AssemblyTitle(\"Here goes the application name\")] to your assembly";
-				Product = Product ?? "Add a [assembly: AssemblyProduct(\"Here goes the product/parent project name\")] to your assembly";
-				if (Authors == null) {
-					var authors = new String[1];
-					authors[0] = "Add [assembly: AssemblyCompany(\"Here goes the authors' names, separated by commas\")] to your assembly";
-					Authors = authors;
-				}
-				return this;
-			}
-		}
+        public AssemblyInformation WithDefaults
+        {
+            get
+            {
+                AboutDetails = AboutDetails ?? "Add a [assembly: Commons.About(\"Here goes the short about details\")] to your assembly";
+                Copyright = Copyright ?? string.Format("Add a [assembly: AssemblyCopyright(\"(c){0:0000} Here goes the copyright holder name\")] to your assembly", DateTimeOffset.Now.Year);
+                Description = Description ?? "Add a [assembly: AssemblyDescription(\"Here goes the short description\")] to your assembly";
+                Title = Title ?? "Add a [assembly: AssemblyTitle(\"Here goes the application name\")] to your assembly";
+                Product = Product ?? "Add a [assembly: AssemblyProduct(\"Here goes the product/parent project name\")] to your assembly";
+                if (Authors == null)
+                {
+                    var authors = new String[1];
+                    authors[0] = "Add [assembly: AssemblyCompany(\"Here goes the authors' names, separated by commas\")] to your assembly";
+                    Authors = authors;
+                }
+                return this;
+            }
+        }
 
-		public void ShowAbout()
-		{
-			ShowTitleLines();
-			WriteLine(_(AboutDetails));
-			Write(_("Authors: "));
-			WriteLine(string.Join(", ", Authors));
-		}
+        public void ShowAbout()
+        {
+            ShowStringBuiltWith(AppendBanner, AppendDescription, AppendAuthors);
+        }
 
-		public void ShowBanner()
-		{
-			WriteLine(_(Title) + "  " + Version + " - " + Copyright);
-			if (AdditionalBannerInfo != null)
-				WriteLine(AdditionalBannerInfo);
-		}
+        public void ShowBanner()
+        {
+            ShowStringBuiltWith(AppendBanner);
+        }
 
-		public void ShowFooter()
-		{
-			if (AdditionalInfo != null)
-				WriteLine("\n{0}", _(AdditionalInfo));
-			if (ReportBugsTo != null)
-				WriteLine(_("\nPlease report bugs {0} <{1}>"),
-								  (ReportBugsTo.IndexOf('@') > 0) ? _("to") : _("at"),
-								  _(ReportBugsTo));
-		}
+        public void ShowFooter()
+        {
+            ShowStringBuiltWith(AppendFooter);
+        }
 
-		public void ShowTitleLines()
-		{
-			ShowBanner();
-			WriteLine(_(Description));
-			if (!string.IsNullOrWhiteSpace(License))
-				WriteLine("\r\n" + _("License: ") + License);
-			WriteLine();
-		}
+        public void ShowTitleLines()
+        {
+            ShowStringBuiltWith(AppendBanner, AppendDescription);
+        }
 
-		private static IEnumerable<string> GetAuthors(Assembly assembly)
-		{
-			string company = assembly.GetAssemblyAttributeValueAsString<AssemblyCompanyAttribute>(a => a.Company);
-			if (!string.IsNullOrWhiteSpace(company))
-				return company.Split(',').Select(s => s.Trim());
-			return null;
-		}
-	}
+        public override string ToString()
+        {
+            return BuildStringWith(AppendBanner, AppendDescription, AppendAuthors, AppendFooter);
+        }
+
+        private static string BuildStringWith(params Action<StringBuilder>[] appenders)
+        {
+            var sb = new StringBuilder();
+            foreach (var builder in appenders)
+                builder(sb);
+            return sb.ToString();
+        }
+
+        private static string ChooseConnector(string line)
+        {
+            return (line?.IndexOf('@') > 0) ? _("to") : _("at");
+        }
+
+        private static IEnumerable<string> GetAuthors(Assembly assembly)
+        {
+            string company = assembly.GetAssemblyAttributeValueAsString<AssemblyCompanyAttribute>(a => a.Company);
+            if (!string.IsNullOrWhiteSpace(company))
+                return company.Split(',').Select(s => s.Trim());
+            return null;
+        }
+
+        private static void ShowStringBuiltWith(params Action<StringBuilder>[] appenders)
+        {
+            Console.Write(BuildStringWith(appenders));
+        }
+
+        private void AppendAuthors(StringBuilder sb)
+        {
+            sb.AppendLine(_(AboutDetails));
+            sb.Append(_("Authors: "));
+            sb.AppendLine(string.Join(", ", Authors));
+        }
+
+        private void AppendBanner(StringBuilder sb)
+        {
+            sb.AppendLine(__($"{Title}  {Version} - {Copyright}"));
+            if (AdditionalBannerInfo != null)
+                sb.AppendLine(AdditionalBannerInfo);
+        }
+
+        private void AppendDescription(StringBuilder sb)
+        {
+            sb.AppendLine(_(Description));
+            if (!string.IsNullOrWhiteSpace(License))
+                sb.AppendLine("\r\n" + _("License: ") + License);
+            sb.AppendLine();
+        }
+
+        private void AppendFooter(StringBuilder sb)
+        {
+            if (AdditionalInfo != null)
+                sb.AppendLine($"\n{_(AdditionalInfo)}");
+            if (ReportBugsTo != null)
+                sb.AppendLine(__($"\nPlease report bugs {ChooseConnector(ReportBugsTo)} <{_(ReportBugsTo)}>"));
+        }
+    }
 }
