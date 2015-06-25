@@ -36,7 +36,7 @@ namespace Commons
 
         public string Details { get; private set; }
 
-        public string TranslatedDetails {  get { return _(Details); } }
+        public string TranslatedDetails { get { return _(Details); } }
 
         public override string ToString()
         {

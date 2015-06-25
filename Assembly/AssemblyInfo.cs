@@ -41,3 +41,7 @@ using Commons;
 [assembly: AssemblyInformationalVersion("2.0.0-Alpha")]
 
 [assembly: License(LicenseType.MIT)]
+
+[assembly: About("The basics")]
+[assembly: IsPartOfPackage("Managed Commons")]
+[assembly: ReportBugsTo("https://github.com/managed-commons/managed-commons-core/issues")]

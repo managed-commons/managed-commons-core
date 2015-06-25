@@ -23,13 +23,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
-namespace Commons.Translation
+namespace Commons.Text
 {
-    public interface ITranslator
+    public static class StringBuilderExtensions
     {
-        string Translate(string locale, string textToTranslate);
-
-        string TranslatePlural(string locale, string singular, string plural, int quantity);
+        public static void AppendLineIfNotNull(this StringBuilder sb, object item, string line = null)
+        {
+            if (sb != null && item != null)
+                sb.AppendLine(line ?? item.ToString());
+        }
     }
 }

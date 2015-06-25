@@ -24,19 +24,19 @@ using System;
 
 namespace Commons
 {
-	[AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
-	public sealed class IsPartOfPackageAttribute : Attribute
-	{
-		public IsPartOfPackageAttribute(string packageName)
-		{
-			PackageName = packageName;
-		}
+    [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
+    public sealed class IsPartOfPackageAttribute : Attribute
+    {
+        public IsPartOfPackageAttribute(string packageName)
+        {
+            PackageName = packageName;
+        }
 
-		public string PackageName { get; private set; }
+        public string PackageName { get; private set; }
 
-		public override string ToString()
-		{
-			return PackageName;
-		}
-	}
+        public override string ToString()
+        {
+            return PackageName;
+        }
+    }
 }

@@ -24,19 +24,19 @@ using System;
 
 namespace Commons
 {
-	[AttributeUsage(AttributeTargets.Assembly)]
-	public sealed class ReportBugsToAttribute : Attribute
-	{
-		public ReportBugsToAttribute(string url)
-		{
-			Url = url;
-		}
+    [AttributeUsage(AttributeTargets.Assembly)]
+    public sealed class ReportBugsToAttribute : Attribute
+    {
+        public ReportBugsToAttribute(string url)
+        {
+            Url = url;
+        }
 
-		public string Url { get; private set; }
+        public string Url { get; private set; }
 
-		public override string ToString()
-		{
-			return Url;
-		}
-	}
+        public override string ToString()
+        {
+            return Url;
+        }
+    }
 }

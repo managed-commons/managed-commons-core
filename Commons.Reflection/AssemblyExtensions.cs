@@ -27,40 +27,42 @@ using System.Reflection;
 
 namespace Commons.Reflection
 {
-	public static class AssemblyExtensions
-	{
-		public static string GetAssemblyAttributeAsString<T>(this Assembly assembly) where T : Attribute
-		{
-			return assembly.GetAssemblyAttributeValueAsString<T>(a => a.ToString());
-		}
+    public static class AssemblyExtensions
+    {
+        public static T GetAssemblyAttribute<T>(this Assembly assembly) where T : Attribute
+        {
+            return (T)assembly?.GetAssemblyAttributes<T>()?.FirstOrDefault();
+        }
 
-		public static object[] GetAssemblyAttributes<T>(this Assembly assembly)
-		{
-			return (assembly == null) ? null : assembly.GetCustomAttributes(typeof(T), false);
-		}
+        public static string GetAssemblyAttributeAsString<T>(this Assembly assembly) where T : Attribute
+        {
+            return assembly.GetAssemblyAttributeValueAsString<T>(a => a.ToString());
+        }
 
-		public static TReturn GetAssemblyAttributeValue<T, TReturn>(this Assembly assembly, Func<T, TReturn> getter) where T : Attribute
-		{
-			object[] result = assembly.GetAssemblyAttributes<T>();
+        public static object[] GetAssemblyAttributes<T>(this Assembly assembly)
+        {
+            return (assembly == null) ? null : assembly.GetCustomAttributes(typeof(T), false);
+        }
 
-			if ((result != null) && (result.Length > 0) && (result[0] is T))
-				return getter((T)result[0]);
-			return default(TReturn);
-		}
+        public static TReturn GetAssemblyAttributeValue<T, TReturn>(this Assembly assembly, Func<T, TReturn> getter) where T : Attribute
+        {
+            T result = assembly.GetAssemblyAttribute<T>();
+            return (result != null) ? getter(result) : default(TReturn);
+        }
 
-		public static string GetAssemblyAttributeValueAsString<T>(this Assembly assembly, Func<T, string> getter) where T : Attribute
-		{
-			return assembly.GetAssemblyAttributeValue<T, string>(getter);
-		}
+        public static string GetAssemblyAttributeValueAsString<T>(this Assembly assembly, Func<T, string> getter) where T : Attribute
+        {
+            return assembly.GetAssemblyAttributeValue<T, string>(getter);
+        }
 
-		public static string GetVersion(this Assembly assembly, int size = 3)
-		{
-			if (assembly == null)
-				return string.Empty;
-			var version = assembly.GetAssemblyAttributeValueAsString<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion);
-			if (string.IsNullOrWhiteSpace(version))
-				version = assembly.GetName().Version.ToString(size);
-			return version;
-		}
-	}
+        public static string GetVersion(this Assembly assembly, int size = 3)
+        {
+            if (assembly == null)
+                return string.Empty;
+            var version = assembly.GetAssemblyAttributeValueAsString<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion);
+            if (string.IsNullOrWhiteSpace(version))
+                version = assembly.GetName().Version.ToString(size);
+            return version;
+        }
+    }
 }

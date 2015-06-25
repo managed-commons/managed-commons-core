@@ -25,41 +25,58 @@ using System.Collections.Generic;
 
 namespace Commons.Translation
 {
-	public class DictionaryTranslator : ITranslator
-	{
-		public void AddLocale(string locale, Dictionary<string, string> dictionary)
-		{
-			if (_.ContainsKey(locale))
-				throw new ArgumentException("Locale already added!!!", nameof(locale));
-			_[locale] = dictionary;
-			if (locale.Contains("-"))
-				locale = locale.Split('-')[0];
-			if (_.ContainsKey(locale))
-				_[locale] = dictionary;
-		}
+    public class DictionaryTranslator : ITranslator
+    {
+        private readonly Dictionary<string, Dictionary<string, string>> _ = new Dictionary<string, Dictionary<string, string>>();
 
-		public string Translate(string locale, string textToTranslate)
-		{
-			return InnerTranslate(locale, textToTranslate);
-		}
+        public void AddLocale(string locale, Dictionary<string, string> dictionary)
+        {
+            locale = ValidateAndNormalizeLocale(locale);
+            if (_.ContainsKey(locale))
+                throw new ArgumentException("Locale already added!!!", nameof(locale));
+            _[locale] = dictionary;
+            if (locale.Contains("-"))
+            {
+                locale = LanguageFrom(locale);
+                if (!_.ContainsKey(locale))
+                    _[locale] = dictionary;
+            }
+        }
 
-		public string TranslatePlural(string locale, string singular, string plural, int quantity)
-		{
-			return quantity == 1 ? InnerTranslate(locale, singular) : InnerTranslate(locale, plural);
-		}
+        public string Translate(string locale, string textToTranslate)
+        {
+            return InnerTranslate(locale, textToTranslate);
+        }
 
-		private readonly Dictionary<string, Dictionary<string, string>> _ = new Dictionary<string, Dictionary<string, string>>();
+        public string TranslatePlural(string locale, string singular, string plural, int quantity)
+        {
+            return quantity == 1 ? InnerTranslate(locale, singular) : InnerTranslate(locale, plural);
+        }
 
-		private string InnerTranslate(string locale, string textToTranslate)
-		{
-			if (_.ContainsKey(locale)) {
-				var dic = _[locale];
-				if (dic.ContainsKey(textToTranslate))
-					return dic[textToTranslate];
-			}
-			if (locale.Contains("-"))
-				return InnerTranslate(locale.Split('-')[0], textToTranslate);
-			return null;
-		}
-	}
+        private static string LanguageFrom(string locale)
+        {
+            return locale.Split('-')[0];
+        }
+
+        private static string ValidateAndNormalizeLocale(string locale)
+        {
+            if (string.IsNullOrWhiteSpace(locale))
+                throw new ArgumentNullException(nameof(locale));
+            return locale.ToLower();
+        }
+
+        private string InnerTranslate(string locale, string textToTranslate)
+        {
+            locale = ValidateAndNormalizeLocale(locale);
+            if (_.ContainsKey(locale))
+            {
+                var dic = _[locale];
+                if (dic.ContainsKey(textToTranslate))
+                    return dic[textToTranslate];
+            }
+            if (locale.Contains("-"))
+                return InnerTranslate(LanguageFrom(locale), textToTranslate);
+            return null;
+        }
+    }
 }

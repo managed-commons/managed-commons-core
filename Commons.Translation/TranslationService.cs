@@ -33,7 +33,7 @@ namespace Commons.Translation
 
         private static string _locale;
 
-        public static string Locale { get { return _locale ?? Thread.CurrentThread.CurrentCulture.Name; } set { _locale = CultureInfo.GetCultureInfo(value).Name; } }
+        public static string Locale { get { return _locale ?? Thread.CurrentThread.CurrentCulture.Name; } set { _locale = value != null ? CultureInfo.GetCultureInfo(value).Name : null; } }
 
         public static string _([Translatable] string textToTranslate)
         {

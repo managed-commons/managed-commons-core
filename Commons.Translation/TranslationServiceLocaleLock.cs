@@ -23,13 +23,26 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace Commons.Translation
 {
-    public interface ITranslator
+    public class TranslationServiceLocaleLock : IDisposable
     {
-        string Translate(string locale, string textToTranslate);
+        private readonly static SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
+        private readonly string _oldLocale;
 
-        string TranslatePlural(string locale, string singular, string plural, int quantity);
+        public TranslationServiceLocaleLock(string locale)
+        {
+            _lock.Wait();
+            _oldLocale = TranslationService.Locale;
+            TranslationService.Locale = locale;
+        }
+
+        public void Dispose()
+        {
+            TranslationService.Locale = _oldLocale;
+            _lock.Release();
+        }
     }
 }

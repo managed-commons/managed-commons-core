@@ -1,26 +1,57 @@
-﻿using System;
+﻿// Commons.Core
+//
+// Copyright (c) 2002-2015 Rafael 'Monoman' Teixeira, Managed Commons Team
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Commons.Translation;
 using Xunit;
-using Commons.Reflection;
 
-namespace Commons.Core
+namespace Commons
 {
     public class AssemblyInformationTests
     {
         [Fact]
         public void ToStringOnSimpleAssemblyInfo()
         {
-            Translation.TranslationService.Locale = "en-US";
-            var info = new AssemblyInformation(typeof(AssemblyInformation).Assembly);
-            Assert.Equal(
-                "Commons.Core  2.0.0-Alpha - Copyright ©2002-2015 Rafael 'Monoman' Teixeira, Managed Commons Team\r\n"+
-                "Core meta-information library\r\n\r\n"+
-                "License: MIT License - Mais detalhes em https://opensource.org/licenses/MIT\n\r\n\r\n\r\n"+
-                "Authors: Rafael 'Monoman' Teixeira, Managed Commons Team\r\n", 
-                info.ToString());
+            using (new TranslationServiceLocaleLock("en-US"))
+            {
+                var info = new AssemblyInformation(typeof(AssemblyInformationTests).Assembly);
+                var version = info.Version;
+                var expected = $@"
+Unit.Commons.Core  {version} - Copyright ©2002-2015 Rafael 'Monoman' Teixeira, Managed Commons Team
+Unit tests to core meta-information library
+
+License: MIT License - See https://opensource.org/licenses/MIT
+
+Unit tests using xUnit
+Authors: Rafael 'Monoman' Teixeira, Managed Commons Team
+
+Additional info for testing purposes
+
+Please report bugs at <https://github.com/managed-commons/managed-commons-core/issues>
+";
+                Assert.Equal(expected.TrimStart('\r', '\n'), info.ToString());
+            }
         }
     }
 }

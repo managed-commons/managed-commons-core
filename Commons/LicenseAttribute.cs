@@ -78,7 +78,7 @@ namespace Commons
             IsProprietary = licenseType == LicenseType.Proprietary;
         }
 
-        public LicenseAttribute(string name, string detailsUrl,  [Translatable] string details, bool isProprietary)
+        public LicenseAttribute(string name, string detailsUrl, [Translatable] string details, bool isProprietary)
         {
             LicenseType = isProprietary ? LicenseType.Proprietary : LicenseType.Other;
             Name = name;
@@ -97,7 +97,7 @@ namespace Commons
 
         public string Name { get; private set; }
 
-        public string TranslatedDetails { get { return __($"See {DetailsUrl}\n") + _(Details); } }
+        public string TranslatedDetails { get { return __($"See {DetailsUrl}") + _(Details); } }
 
         public override string ToString()
         {
@@ -107,8 +107,8 @@ namespace Commons
         private struct LicenseDescriptor
         {
             public readonly string Details;
-            public readonly string Url;
             public readonly string Name;
+            public readonly string Url;
 
             public LicenseDescriptor(string name, string url, string details = null)
             {

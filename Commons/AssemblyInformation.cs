@@ -26,6 +26,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Commons.Reflection;
+using Commons.Text;
 using static Commons.Translation.TranslationService;
 
 namespace Commons
@@ -42,7 +43,7 @@ namespace Commons
             AboutDetails = assembly.GetAssemblyAttributeAsString<AboutAttribute>();
             AdditionalInfo = assembly.GetAssemblyAttributeAsString<AdditionalInfoAttribute>();
             ReportBugsTo = assembly.GetAssemblyAttributeAsString<ReportBugsToAttribute>();
-            License = assembly.GetAssemblyAttributeAsString<LicenseAttribute>();
+            License = assembly.GetAssemblyAttribute<LicenseAttribute>();
             Authors = GetAuthors(assembly);
         }
 
@@ -62,7 +63,7 @@ namespace Commons
 
         public string ExeName { get; set; }
 
-        public string License { get; set; }
+        public LicenseAttribute License { get; set; }
 
         public string Product { get; set; }
 
@@ -145,31 +146,26 @@ namespace Commons
         private void AppendAuthors(StringBuilder sb)
         {
             sb.AppendLine(_(AboutDetails));
-            sb.Append(_("Authors: "));
-            sb.AppendLine(string.Join(", ", Authors));
+            sb.AppendLine(__($"Authors: {string.Join(", ", Authors)}"));
         }
 
         private void AppendBanner(StringBuilder sb)
         {
-            sb.AppendLine(__($"{Title}  {Version} - {Copyright}"));
-            if (AdditionalBannerInfo != null)
-                sb.AppendLine(AdditionalBannerInfo);
+            sb.AppendLine($"{Title}  {Version} - {Copyright}");
+            sb.AppendLineIfNotNull(AdditionalBannerInfo);
         }
 
         private void AppendDescription(StringBuilder sb)
         {
             sb.AppendLine(_(Description));
-            if (!string.IsNullOrWhiteSpace(License))
-                sb.AppendLine("\r\n" + _("License: ") + License);
+            sb.AppendLineIfNotNull(License, __($"\r\nLicense: {License}"));
             sb.AppendLine();
         }
 
         private void AppendFooter(StringBuilder sb)
         {
-            if (AdditionalInfo != null)
-                sb.AppendLine($"\n{_(AdditionalInfo)}");
-            if (ReportBugsTo != null)
-                sb.AppendLine(__($"\nPlease report bugs {ChooseConnector(ReportBugsTo)} <{_(ReportBugsTo)}>"));
+            sb.AppendLineIfNotNull(AdditionalInfo, $"\r\n{_(AdditionalInfo)}");
+            sb.AppendLineIfNotNull(ReportBugsTo, __($"\r\nPlease report bugs {ChooseConnector(ReportBugsTo)} <{_(ReportBugsTo)}>"));
         }
     }
 }
