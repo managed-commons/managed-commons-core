@@ -55,6 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyInformationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TranslationServiceTests.cs" />
   </ItemGroup>
@@ -86,6 +87,6 @@
   </Target>
   -->
   <Target Name="xUnit" AfterTargets="Build">
-    <Exec Command="$(SolutionDir)packages\xunit.runner.console.2.0.0\tools\xunit.console.exe $(TargetPath) -noshadow" StandardOutputImportance="High"/>
+    <Exec Command="$(SolutionDir)packages\xunit.runner.console.2.0.0\tools\xunit.console.exe $(TargetPath) -noshadow" StandardOutputImportance="High" />
   </Target>
 </Project>
