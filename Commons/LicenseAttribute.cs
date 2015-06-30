@@ -49,7 +49,7 @@ namespace Commons
     [AttributeUsage(AttributeTargets.Assembly)]
     public sealed class LicenseAttribute : Attribute
     {
-        private static Dictionary<LicenseType, LicenseDescriptor> Licenses = new Dictionary<LicenseType, LicenseDescriptor>()
+        private static readonly Dictionary<LicenseType, LicenseDescriptor> Licenses = new Dictionary<LicenseType, LicenseDescriptor>
         {
             [LicenseType.Proprietary] = new LicenseDescriptor("Proprietary", null),
             [LicenseType.AGPL3] = new LicenseDescriptor("GNU Affero General Public License, Version 3 (AGPL-3.0)", "https://opensource.org/licenses/AGPL-3.0"),

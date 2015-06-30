@@ -9,7 +9,7 @@ namespace Commons.Translation
     /// translated and can be automatically extracted by a tool (normally the compiler)
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-    public class TranslatableAttribute : Attribute
+    public sealed class TranslatableAttribute : Attribute
     {
     }
 }

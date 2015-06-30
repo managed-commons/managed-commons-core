@@ -46,8 +46,11 @@ namespace Commons.Reflection
 
         public static TReturn GetAssemblyAttributeValue<T, TReturn>(this Assembly assembly, Func<T, TReturn> getter) where T : Attribute
         {
-            T result = assembly.GetAssemblyAttribute<T>();
+            var result = assembly.GetAssemblyAttribute<T>();
+            /// Bug on Code-Cracker https://github.com/code-cracker/code-cracker/issues/397
+#pragma warning disable CC0031 // Use Invoke Method To Fire Event Analyzer
             return (result != null) ? getter(result) : default(TReturn);
+#pragma warning restore CC0031 // Use Invoke Method To Fire Event Analyzer
         }
 
         public static string GetAssemblyAttributeValueAsString<T>(this Assembly assembly, Func<T, string> getter) where T : Attribute

@@ -29,7 +29,7 @@ namespace Commons.Translation
 {
     public static class TranslationService
     {
-        private static TranslatorInChain _chain = null;
+        private static TranslatorInChain _chain;
 
         private static string _locale;
 
@@ -94,7 +94,7 @@ namespace Commons.Translation
             var translator = _chain;
             while (translator != null && (context == "*" || translator.Context == context))
             {
-                var result = use(translator);
+                var result = use?.Invoke(translator);
                 if (result != null)
                     return result;
                 translator = translator.Next;

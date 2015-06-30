@@ -77,7 +77,7 @@ namespace Commons
         {
             using (new TranslationServiceLocaleLock(locale))
             {
-                var name = "David Fowler";
+                const string name = "David Fowler";
                 Assert.Equal(expected, __($"Hello {name}!!!"));
             }
         }

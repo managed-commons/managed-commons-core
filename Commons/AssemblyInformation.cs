@@ -78,7 +78,7 @@ namespace Commons
             get
             {
                 AboutDetails = AboutDetails ?? "Add a [assembly: Commons.About(\"Here goes the short about details\")] to your assembly";
-                Copyright = Copyright ?? string.Format("Add a [assembly: AssemblyCopyright(\"(c){0:0000} Here goes the copyright holder name\")] to your assembly", DateTimeOffset.Now.Year);
+                Copyright = Copyright ?? $"Add a [assembly: AssemblyCopyright(\"(c){DateTimeOffset.Now.Year:0000} Here goes the copyright holder name\")] to your assembly";
                 Description = Description ?? "Add a [assembly: AssemblyDescription(\"Here goes the short description\")] to your assembly";
                 Title = Title ?? "Add a [assembly: AssemblyTitle(\"Here goes the application name\")] to your assembly";
                 Product = Product ?? "Add a [assembly: AssemblyProduct(\"Here goes the product/parent project name\")] to your assembly";
@@ -132,7 +132,7 @@ namespace Commons
 
         private static IEnumerable<string> GetAuthors(Assembly assembly)
         {
-            string company = assembly.GetAssemblyAttributeValueAsString<AssemblyCompanyAttribute>(a => a.Company);
+            var company = assembly.GetAssemblyAttributeValueAsString<AssemblyCompanyAttribute>(a => a.Company);
             if (!string.IsNullOrWhiteSpace(company))
                 return company.Split(',').Select(s => s.Trim());
             return null;
