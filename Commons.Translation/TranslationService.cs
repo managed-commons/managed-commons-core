@@ -29,10 +29,6 @@ namespace Commons.Translation
 {
     public static class TranslationService
     {
-        private static TranslatorInChain _chain;
-
-        private static string _locale;
-
         public static string Locale { get { return _locale ?? Thread.CurrentThread.CurrentCulture.Name; } set { _locale = value != null ? CultureInfo.GetCultureInfo(value).Name : null; } }
 
         public static string _([Translatable] string textToTranslate)
@@ -89,6 +85,10 @@ namespace Commons.Translation
             return InnerTranslatePlural(locale, singular, plural, quantity, context);
         }
 
+        private static TranslatorInChain _chain;
+
+        private static string _locale;
+
         private static string FindAndTranslate(Func<TranslatorInChain, string> use, string context)
         {
             var translator = _chain;
@@ -136,8 +136,6 @@ namespace Commons.Translation
             public readonly string Context;
             public readonly TranslatorInChain Next;
 
-            private readonly ITranslator _translator;
-
             public TranslatorInChain(string context, ITranslator translator, TranslatorInChain next)
             {
                 Context = context;
@@ -154,6 +152,8 @@ namespace Commons.Translation
             {
                 return _translator.TranslatePlural(locale, singular, plural, quantity);
             }
+
+            private readonly ITranslator _translator;
         }
     }
 }

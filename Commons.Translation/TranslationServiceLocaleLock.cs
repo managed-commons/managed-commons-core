@@ -29,9 +29,6 @@ namespace Commons.Translation
 {
     public class TranslationServiceLocaleLock : IDisposable
     {
-        private static SemaphoreSlim _lock;
-        private readonly string _oldLocale;
-
         static TranslationServiceLocaleLock()
         {
             _lock = new SemaphoreSlim(1, 1);
@@ -52,6 +49,9 @@ namespace Commons.Translation
             _lock.Release();
             GC.SuppressFinalize(this);
         }
+
+        private static SemaphoreSlim _lock;
+        private readonly string _oldLocale;
 
         private static void ProcessExit(object sender, EventArgs e)
         {

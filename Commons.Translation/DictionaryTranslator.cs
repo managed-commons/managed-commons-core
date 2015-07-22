@@ -27,8 +27,6 @@ namespace Commons.Translation
 {
     public class DictionaryTranslator : ITranslator
     {
-        private readonly Dictionary<string, Dictionary<string, string>> _ = new Dictionary<string, Dictionary<string, string>>();
-
         public void AddLocale(string locale, Dictionary<string, string> dictionary)
         {
             locale = ValidateAndNormalizeLocale(locale);
@@ -52,6 +50,8 @@ namespace Commons.Translation
         {
             return quantity == 1 ? InnerTranslate(locale, singular) : InnerTranslate(locale, plural);
         }
+
+        private readonly Dictionary<string, Dictionary<string, string>> _ = new Dictionary<string, Dictionary<string, string>>();
 
         private static string LanguageFrom(string locale)
         {

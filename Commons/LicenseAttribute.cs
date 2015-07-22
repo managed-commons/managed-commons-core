@@ -49,23 +49,6 @@ namespace Commons
     [AttributeUsage(AttributeTargets.Assembly)]
     public sealed class LicenseAttribute : Attribute
     {
-        private static readonly Dictionary<LicenseType, LicenseDescriptor> Licenses = new Dictionary<LicenseType, LicenseDescriptor>
-        {
-            [LicenseType.Proprietary] = new LicenseDescriptor("Proprietary", null),
-            [LicenseType.AGPL3] = new LicenseDescriptor("GNU Affero General Public License, Version 3 (AGPL-3.0)", "https://opensource.org/licenses/AGPL-3.0"),
-            [LicenseType.Apache2] = new LicenseDescriptor("Apache License, Version 2.0", "https://opensource.org/licenses/Apache-2.0"),
-            [LicenseType.BSD3Clause] = new LicenseDescriptor("BSD 3-Clause License", "https://opensource.org/licenses/BSD-3-Clause"),
-            [LicenseType.BSD2Clause] = new LicenseDescriptor("BSD 2-Clause License", "https://opensource.org/licenses/BSD-2-Clause"),
-            [LicenseType.GPL2] = new LicenseDescriptor("GNU General Public License, Version 2 (GPL-2.0)", "https://opensource.org/licenses/GPL-2.0"),
-            [LicenseType.GPL3] = new LicenseDescriptor("GNU General Public License, Version 3 (GPL-3.0)", "https://opensource.org/licenses/GPL-3.0"),
-            [LicenseType.LGPL21] = new LicenseDescriptor("GNU Lesser General Public License, Version 2.1 (LGPL-2.1)", "https://opensource.org/licenses/LGPL-2.1"),
-            [LicenseType.LGPL3] = new LicenseDescriptor("GNU Lesser General Public License, Version 3.0 (LGPL-3.0)", "https://opensource.org/licenses/LGPL-3.0"),
-            [LicenseType.MIT] = new LicenseDescriptor("MIT License", "https://opensource.org/licenses/MIT"),
-            [LicenseType.Mozilla2] = new LicenseDescriptor("Mozilla Public License 2.0 (MPL-2.0)", "https://opensource.org/licenses/MPL-2.0"),
-            [LicenseType.CDDL] = new LicenseDescriptor("COMMON DEVELOPMENT AND DISTRIBUTION LICENSE Version 1.0 (CDDL-1.0)", "https://opensource.org/licenses/CDDL-1.0"),
-            [LicenseType.Eclipse] = new LicenseDescriptor("Eclipse Public License, Version 1.0 (EPL-1.0)", "https://opensource.org/licenses/EPL-1.0")
-        };
-
         public LicenseAttribute(LicenseType licenseType)
         {
             if (licenseType == LicenseType.Other)
@@ -103,6 +86,23 @@ namespace Commons
         {
             return string.IsNullOrWhiteSpace(DetailsUrl) ? Name : (Name + " - " + TranslatedDetails);
         }
+
+        private static readonly Dictionary<LicenseType, LicenseDescriptor> Licenses = new Dictionary<LicenseType, LicenseDescriptor>
+        {
+            [LicenseType.Proprietary] = new LicenseDescriptor("Proprietary", null),
+            [LicenseType.AGPL3] = new LicenseDescriptor("GNU Affero General Public License, Version 3 (AGPL-3.0)", "https://opensource.org/licenses/AGPL-3.0"),
+            [LicenseType.Apache2] = new LicenseDescriptor("Apache License, Version 2.0", "https://opensource.org/licenses/Apache-2.0"),
+            [LicenseType.BSD3Clause] = new LicenseDescriptor("BSD 3-Clause License", "https://opensource.org/licenses/BSD-3-Clause"),
+            [LicenseType.BSD2Clause] = new LicenseDescriptor("BSD 2-Clause License", "https://opensource.org/licenses/BSD-2-Clause"),
+            [LicenseType.GPL2] = new LicenseDescriptor("GNU General Public License, Version 2 (GPL-2.0)", "https://opensource.org/licenses/GPL-2.0"),
+            [LicenseType.GPL3] = new LicenseDescriptor("GNU General Public License, Version 3 (GPL-3.0)", "https://opensource.org/licenses/GPL-3.0"),
+            [LicenseType.LGPL21] = new LicenseDescriptor("GNU Lesser General Public License, Version 2.1 (LGPL-2.1)", "https://opensource.org/licenses/LGPL-2.1"),
+            [LicenseType.LGPL3] = new LicenseDescriptor("GNU Lesser General Public License, Version 3.0 (LGPL-3.0)", "https://opensource.org/licenses/LGPL-3.0"),
+            [LicenseType.MIT] = new LicenseDescriptor("MIT License", "https://opensource.org/licenses/MIT"),
+            [LicenseType.Mozilla2] = new LicenseDescriptor("Mozilla Public License 2.0 (MPL-2.0)", "https://opensource.org/licenses/MPL-2.0"),
+            [LicenseType.CDDL] = new LicenseDescriptor("COMMON DEVELOPMENT AND DISTRIBUTION LICENSE Version 1.0 (CDDL-1.0)", "https://opensource.org/licenses/CDDL-1.0"),
+            [LicenseType.Eclipse] = new LicenseDescriptor("Eclipse Public License, Version 1.0 (EPL-1.0)", "https://opensource.org/licenses/EPL-1.0")
+        };
 
         private struct LicenseDescriptor
         {
