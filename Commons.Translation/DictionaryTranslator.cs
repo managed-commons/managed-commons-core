@@ -41,31 +41,22 @@ namespace Commons.Translation
             }
         }
 
-        public string Translate(string locale, string textToTranslate)
-        {
-            return InnerTranslate(locale, textToTranslate);
-        }
+        public string Translate(string locale, string textToTranslate) => InnerTranslate(locale, textToTranslate);
 
-        public string TranslatePlural(string locale, string singular, string plural, int quantity)
-        {
-            return quantity == 1 ? InnerTranslate(locale, singular) : InnerTranslate(locale, plural);
-        }
+        public string TranslatePlural(string locale, string singular, string plural, int quantity) => quantity == 1 ? InnerTranslate(locale, singular) : InnerTranslate(locale, plural);
 
-        private readonly Dictionary<string, Dictionary<string, string>> _ = new Dictionary<string, Dictionary<string, string>>();
+        readonly Dictionary<string, Dictionary<string, string>> _ = new Dictionary<string, Dictionary<string, string>>();
 
-        private static string LanguageFrom(string locale)
-        {
-            return locale.Split('-')[0];
-        }
+        static string LanguageFrom(string locale) => locale.Split('-')[0];
 
-        private static string ValidateAndNormalizeLocale(string locale)
+        static string ValidateAndNormalizeLocale(string locale)
         {
             if (string.IsNullOrWhiteSpace(locale))
                 throw new ArgumentNullException(nameof(locale));
             return locale.ToLower();
         }
 
-        private string InnerTranslate(string locale, string textToTranslate)
+        string InnerTranslate(string locale, string textToTranslate)
         {
             locale = ValidateAndNormalizeLocale(locale);
             if (_.ContainsKey(locale))

@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -29,40 +28,30 @@ namespace Commons.Reflection
 {
     public static class AssemblyExtensions
     {
-        public static T GetAssemblyAttribute<T>(this Assembly assembly) where T : Attribute
-        {
-            return (T)assembly?.GetAssemblyAttributes<T>()?.FirstOrDefault();
-        }
+        public static string AttributeToString<T>(this Assembly assembly) where T : Attribute =>
+            assembly.GetAttributeValueAsString<T>(a => a.ToString());
 
-        public static string GetAssemblyAttributeAsString<T>(this Assembly assembly) where T : Attribute
-        {
-            return assembly.GetAssemblyAttributeValueAsString<T>(a => a.ToString());
-        }
+        public static T GetAttribute<T>(this Assembly assembly) where T : Attribute => (T)assembly?.GetAttributes<T>()?.FirstOrDefault();
 
-        public static object[] GetAssemblyAttributes<T>(this Assembly assembly)
-        {
-            return (assembly == null) ? null : assembly.GetCustomAttributes(typeof(T), false);
-        }
+        public static object[] GetAttributes<T>(this Assembly assembly) => assembly?.GetCustomAttributes(typeof(T), false);
 
-        public static TReturn GetAssemblyAttributeValue<T, TReturn>(this Assembly assembly, Func<T, TReturn> getter) where T : Attribute
+        public static TReturn GetAttributeValue<T, TReturn>(this Assembly assembly, Func<T, TReturn> getter) where T : Attribute
         {
-            var result = assembly.GetAssemblyAttribute<T>();
+            var result = assembly.GetAttribute<T>();
             /// Bug on Code-Cracker https://github.com/code-cracker/code-cracker/issues/397
 #pragma warning disable CC0031 // Use Invoke Method To Fire Event Analyzer
             return (result != null) ? getter(result) : default(TReturn);
 #pragma warning restore CC0031 // Use Invoke Method To Fire Event Analyzer
         }
 
-        public static string GetAssemblyAttributeValueAsString<T>(this Assembly assembly, Func<T, string> getter) where T : Attribute
-        {
-            return assembly.GetAssemblyAttributeValue<T, string>(getter);
-        }
+        public static string GetAttributeValueAsString<T>(this Assembly assembly, Func<T, string> getter) where T : Attribute =>
+            assembly.GetAttributeValue<T, string>(getter);
 
         public static string GetVersion(this Assembly assembly, int size = 3)
         {
             if (assembly == null)
                 return string.Empty;
-            var version = assembly.GetAssemblyAttributeValueAsString<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion);
+            var version = assembly.GetAttributeValueAsString<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion);
             if (string.IsNullOrWhiteSpace(version))
                 version = assembly.GetName().Version.ToString(size);
             return version;

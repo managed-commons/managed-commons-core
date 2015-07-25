@@ -70,24 +70,21 @@ namespace Commons
             IsProprietary = isProprietary;
         }
 
-        public string Details { get; private set; }
+        public string Details { get; }
 
-        public string DetailsUrl { get; private set; }
+        public string DetailsUrl { get; }
 
-        public bool IsProprietary { get; private set; }
+        public bool IsProprietary { get; }
 
-        public LicenseType LicenseType { get; private set; }
+        public LicenseType LicenseType { get; }
 
-        public string Name { get; private set; }
+        public string Name { get; }
 
-        public string TranslatedDetails { get { return __($"See {DetailsUrl}") + _(Details); } }
+        public string TranslatedDetails => __($"See {DetailsUrl}") + _(Details);
 
-        public override string ToString()
-        {
-            return string.IsNullOrWhiteSpace(DetailsUrl) ? Name : (Name + " - " + TranslatedDetails);
-        }
+        public override string ToString() => string.IsNullOrWhiteSpace(DetailsUrl) ? Name : (Name + " - " + TranslatedDetails);
 
-        private static readonly Dictionary<LicenseType, LicenseDescriptor> Licenses = new Dictionary<LicenseType, LicenseDescriptor>
+        static readonly Dictionary<LicenseType, LicenseDescriptor> Licenses = new Dictionary<LicenseType, LicenseDescriptor>
         {
             [LicenseType.Proprietary] = new LicenseDescriptor("Proprietary", null),
             [LicenseType.AGPL3] = new LicenseDescriptor("GNU Affero General Public License, Version 3 (AGPL-3.0)", "https://opensource.org/licenses/AGPL-3.0"),
@@ -104,7 +101,7 @@ namespace Commons
             [LicenseType.Eclipse] = new LicenseDescriptor("Eclipse Public License, Version 1.0 (EPL-1.0)", "https://opensource.org/licenses/EPL-1.0")
         };
 
-        private struct LicenseDescriptor
+        struct LicenseDescriptor
         {
             public readonly string Details;
             public readonly string Name;

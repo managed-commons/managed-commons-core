@@ -34,13 +34,10 @@ namespace Commons
             Details = details;
         }
 
-        public string Details { get; private set; }
+        public string Details { get; }
 
-        public string TranslatedDetails { get { return _(Details); } }
+        public string TranslatedDetails => _(Details);
 
-        public override string ToString()
-        {
-            return TranslatedDetails;
-        }
+        public override string ToString() => TranslatedDetails;
     }
 }

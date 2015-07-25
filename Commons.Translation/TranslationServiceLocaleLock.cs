@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
@@ -50,10 +49,10 @@ namespace Commons.Translation
             GC.SuppressFinalize(this);
         }
 
-        private static SemaphoreSlim _lock;
-        private readonly string _oldLocale;
+        static SemaphoreSlim _lock;
+        readonly string _oldLocale;
 
-        private static void ProcessExit(object sender, EventArgs e)
+        static void ProcessExit(object sender, EventArgs e)
         {
             try
             {

@@ -32,11 +32,8 @@ namespace Commons
             PackageName = packageName;
         }
 
-        public string PackageName { get; private set; }
+        public string PackageName { get; }
 
-        public override string ToString()
-        {
-            return PackageName;
-        }
+        public override string ToString() => PackageName;
     }
 }

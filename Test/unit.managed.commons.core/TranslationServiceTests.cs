@@ -73,7 +73,7 @@ namespace Commons
             }
         }
 
-        private static void TestHelloDavidFowler(string locale, string expected)
+        static void TestHelloDavidFowler(string locale, string expected)
         {
             using (new TranslationServiceLocaleLock(locale))
             {

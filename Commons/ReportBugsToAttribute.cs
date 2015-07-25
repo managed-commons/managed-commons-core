@@ -32,11 +32,8 @@ namespace Commons
             Url = url;
         }
 
-        public string Url { get; private set; }
+        public string Url { get; }
 
-        public override string ToString()
-        {
-            return Url;
-        }
+        public override string ToString() => Url;
     }
 }

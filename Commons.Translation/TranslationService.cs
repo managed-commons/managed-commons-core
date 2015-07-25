@@ -85,11 +85,11 @@ namespace Commons.Translation
             return InnerTranslatePlural(locale, singular, plural, quantity, context);
         }
 
-        private static TranslatorInChain _chain;
+        static TranslatorInChain _chain;
 
-        private static string _locale;
+        static string _locale;
 
-        private static string FindAndTranslate(Func<TranslatorInChain, string> use, string context)
+        static string FindAndTranslate(Func<TranslatorInChain, string> use, string context)
         {
             var translator = _chain;
             while (translator != null && (context == "*" || translator.Context == context))
@@ -102,7 +102,7 @@ namespace Commons.Translation
             return (context != "*") ? FindAndTranslate(use, "*") : null;
         }
 
-        private static string InnerFormat(string locale, string textToTranslate, object[] args, string context)
+        static string InnerFormat(string locale, string textToTranslate, object[] args, string context)
         {
             if (locale == null)
                 throw new ArgumentNullException(nameof(locale));
@@ -111,7 +111,7 @@ namespace Commons.Translation
             return string.Format(CultureInfo.GetCultureInfo(locale), InnerTranslate(locale, textToTranslate, context), args);
         }
 
-        private static string InnerTranslate(string locale, string textToTranslate, string context)
+        static string InnerTranslate(string locale, string textToTranslate, string context)
         {
             if (string.IsNullOrWhiteSpace(textToTranslate))
                 return textToTranslate;
@@ -119,7 +119,7 @@ namespace Commons.Translation
                 ?? textToTranslate;
         }
 
-        private static string InnerTranslatePlural(string locale, string singular, string plural, int quantity, string context)
+        static string InnerTranslatePlural(string locale, string singular, string plural, int quantity, string context)
         {
             if (singular == null)
                 throw new ArgumentNullException(nameof(singular));
@@ -131,7 +131,7 @@ namespace Commons.Translation
                 ?? ((quantity == 1) ? singular : plural);
         }
 
-        private class TranslatorInChain : ITranslator
+        class TranslatorInChain : ITranslator
         {
             public readonly string Context;
             public readonly TranslatorInChain Next;
@@ -143,17 +143,11 @@ namespace Commons.Translation
                 Next = next;
             }
 
-            public string Translate(string locale, string textToTranslate)
-            {
-                return _translator.Translate(locale, textToTranslate);
-            }
+            public string Translate(string locale, string textToTranslate) => _translator.Translate(locale, textToTranslate);
 
-            public string TranslatePlural(string locale, string singular, string plural, int quantity)
-            {
-                return _translator.TranslatePlural(locale, singular, plural, quantity);
-            }
+            public string TranslatePlural(string locale, string singular, string plural, int quantity) => _translator.TranslatePlural(locale, singular, plural, quantity);
 
-            private readonly ITranslator _translator;
+            readonly ITranslator _translator;
         }
     }
 }
