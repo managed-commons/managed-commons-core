@@ -23,13 +23,14 @@
 using System;
 using System.Linq;
 using Commons.Translation;
-using Xunit;
+using NUnit.Framework;
 
 namespace Commons
 {
+    [TestFixture]
     public class AssemblyInformationTests
     {
-        [Fact]
+        [Test]
         public void ToStringOnSimpleAssemblyInfo()
         {
             using (new TranslationServiceLocaleLock("en-US"))
@@ -42,14 +43,14 @@ Unit tests to core meta-information library
 
 License: MIT License - See https://opensource.org/licenses/MIT
 
-Unit tests using xUnit
+Unit tests using NUnit
 Authors: Rafael 'Monoman' Teixeira, Managed Commons Team
 
 Additional info for testing purposes
 
 Please report bugs at <https://github.com/managed-commons/managed-commons-core/issues>
 ";
-                Assert.Equal(expected.TrimStart('\r', '\n'), info.ToString());
+                Assert.AreEqual(expected.TrimStart('\r', '\n'), info.ToString());
             }
         }
     }

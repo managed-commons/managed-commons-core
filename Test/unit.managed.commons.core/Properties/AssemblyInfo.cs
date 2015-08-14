@@ -39,7 +39,7 @@ using Commons;
 [assembly: AssemblyFileVersion("1.0.0")]
 [assembly: AssemblyInformationalVersion("1.0.0")]
 [assembly: License(LicenseType.MIT)]
-[assembly: About("Unit tests using xUnit")]
+[assembly: About("Unit tests using NUnit")]
 [assembly: ReportBugsTo("https://github.com/managed-commons/managed-commons-core/issues")]
 [assembly: AdditionalInfo("Additional info for testing purposes")]
 [assembly: IsPartOfPackage("Managed Commons")]

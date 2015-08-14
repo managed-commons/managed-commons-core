@@ -21,6 +21,7 @@
 // SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -28,10 +29,38 @@ namespace Commons.Text
 {
     public static class StringBuilderExtensions
     {
-        public static void AppendLineIfNotNull(this StringBuilder sb, object item, string line = null)
+        public static StringBuilder AppendLineIfNotEmpty(this StringBuilder sb, string value)
         {
-            if (sb != null && item != null)
-                sb.AppendLine(line ?? item.ToString());
+            if (sb != null && !string.IsNullOrWhiteSpace(value))
+                sb.AppendLine(value);
+            return sb;
+        }
+
+        public static StringBuilder AppendLineIfNotNull(this StringBuilder sb, object item, string text = null)
+        {
+            if (item != null)
+                sb.AppendLineIfNotEmpty(text ?? item.ToString());
+            return sb;
+        }
+
+        public static StringBuilder AppendLinesWithIndentAndSeparator(this StringBuilder sb, IEnumerable<string> items, string indent, char separator = ',')
+        {
+            foreach (var text in items)
+                sb.AppendLine($"{indent}{text}{separator}");
+            return sb;
+        }
+
+        public static StringBuilder TrimLastSeparatorPreservingWhitespace(this StringBuilder sb, char separator = ',')
+        {
+            for (int j = sb.Length - 1; j > 0; j--) {
+                var c = sb[j];
+                if (!char.IsWhiteSpace(c)) {
+                    if (c == separator)
+                        sb.Remove(j, 1);
+                    break;
+                }
+            }
+            return sb;
         }
     }
 }

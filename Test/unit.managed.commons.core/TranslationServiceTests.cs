@@ -24,11 +24,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Commons.Translation;
-using Xunit;
+using NUnit.Framework;
 using static Commons.Translation.TranslationService;
 
 namespace Commons
 {
+    [TestFixture]
     public class TranslationServiceTests
     {
         static TranslationServiceTests()
@@ -39,46 +40,44 @@ namespace Commons
             RegisterTranslator(translator);
         }
 
-        [Fact]
+        [Test]
         public void TestInterpolatedStringArgentinianSpanishTranslation()
         {
             TestHelloDavidFowler("es-AR", "Hola David Fowler!!!");
         }
 
-        [Fact]
+        [Test]
         public void TestInterpolatedStringNonTranslation()
         {
             TestHelloDavidFowler("en-US", "Hello David Fowler!!!");
         }
 
-        [Fact]
+        [Test]
         public void TestInterpolatedStringPortugueseBrazilianTranslation()
         {
             TestHelloDavidFowler("pt-BR", "Alô David Fowler!!!");
         }
 
-        [Fact]
+        [Test]
         public void TestInterpolatedStringSpanishTranslation()
         {
             TestHelloDavidFowler("es", "Hola David Fowler!!!");
         }
 
-        [Fact]
+        [Test]
         public void TestLicenseAttributeTranslation()
         {
-            using (new TranslationServiceLocaleLock("pt-BR"))
-            {
+            using (new TranslationServiceLocaleLock("pt-BR")) {
                 var license = new LicenseAttribute(LicenseType.MIT);
-                Assert.Equal("MIT License - Mais detalhes em https://opensource.org/licenses/MIT", license.ToString());
+                Assert.AreEqual("MIT License - Mais detalhes em https://opensource.org/licenses/MIT", license.ToString());
             }
         }
 
         static void TestHelloDavidFowler(string locale, string expected)
         {
-            using (new TranslationServiceLocaleLock(locale))
-            {
+            using (new TranslationServiceLocaleLock(locale)) {
                 const string name = "David Fowler";
-                Assert.Equal(expected, __($"Hello {name}!!!"));
+                Assert.AreEqual(expected, __($"Hello {name}!!!"));
             }
         }
     }

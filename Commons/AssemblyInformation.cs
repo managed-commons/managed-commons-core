@@ -138,7 +138,7 @@ namespace Commons
         void AppendBanner(StringBuilder sb)
         {
             sb.AppendLine($"{Title}  {Version} - {Copyright}");
-            sb.AppendLineIfNotNull(AdditionalBannerInfo);
+            sb.AppendLineIfNotEmpty(AdditionalBannerInfo);
         }
 
         void AppendDescription(StringBuilder sb)
