@@ -44,6 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assembly\AssemblyInfo.cs" />
+    <Compile Include="Commons.Text\IEnumerableOfStringExtensions.cs" />
+    <Compile Include="Commons.Text\StringExtensions.cs" />
+    <Compile Include="Commons.Text\TextReaderExtensions.cs" />
     <Compile Include="Commons.Translation\DictionaryTranslator.cs" />
     <Compile Include="Commons.Translation\ITranslator.cs" />
     <Compile Include="Commons.Translation\TranslatableAttribute.cs" />

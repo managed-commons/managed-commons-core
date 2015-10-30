@@ -24,6 +24,7 @@ using System;
 using System.Globalization;
 using System.Reflection;
 using System.Threading;
+using Commons.Text;
 
 namespace Commons.Translation
 {
@@ -34,25 +35,31 @@ namespace Commons.Translation
         public static string _([Translatable] string textToTranslate)
         {
             var context = Assembly.GetCallingAssembly().FullName;
-            return InnerTranslate(Locale, textToTranslate, context);
+            return InnerTranslate(Locale, context, textToTranslate);
         }
 
         public static string __([Translatable] FormattableString textToTranslate)
         {
             var context = Assembly.GetCallingAssembly().FullName;
-            return InnerFormat(Locale, textToTranslate.Format, textToTranslate.GetArguments(), context);
+            return InnerFormat(Locale, context, textToTranslate.Format, textToTranslate.GetArguments());
         }
 
         public static string _Format([Translatable] string textToTranslate, params object[] args)
         {
             var context = Assembly.GetCallingAssembly().FullName;
-            return InnerFormat(_locale, textToTranslate, args, context);
+            return InnerFormat(_locale, context, textToTranslate, args);
         }
 
-        public static string _Plural([Translatable] string singular, [Translatable] string plural, int quantity)
+        public static string _s(int quantity, [Translatable] string none, [Translatable] string singular, [Translatable] params string[] plurals)
         {
             var context = Assembly.GetCallingAssembly().FullName;
-            return InnerTranslatePlural(Locale, singular, plural, quantity, context);
+            return InnerTranslatePlural(Locale, context, quantity, none, singular, plurals);
+        }
+
+        public static string DefaultPlural(int quantity, string none, string singular, string[] plurals)
+        {
+            var pluralsLimit = plurals.Length;
+            return (quantity == 0) ? none : ((quantity == 1) ? singular : (quantity > pluralsLimit ? plurals[pluralsLimit - 1] : plurals[quantity - 2]));
         }
 
         public static void RegisterTranslator(ITranslator translator)
@@ -68,21 +75,21 @@ namespace Commons.Translation
             if (locale == null)
                 throw new ArgumentNullException(nameof(locale));
             var context = Assembly.GetCallingAssembly().FullName;
-            return InnerTranslate(locale, textToTranslate, context);
+            return InnerTranslate(locale, context, textToTranslate);
         }
 
         public static string TranslateAndFormat(string locale, [Translatable] string textToTranslate, params object[] args)
         {
             var context = Assembly.GetCallingAssembly().FullName;
-            return InnerFormat(locale, textToTranslate, args, context);
+            return InnerFormat(locale, context, textToTranslate, args);
         }
 
-        public static string TranslatePlural(string locale, [Translatable] string singular, [Translatable] string plural, int quantity)
+        public static string TranslatePlural(string locale, int quantity, [Translatable] string none, [Translatable] string singular, [Translatable] params string[] plurals)
         {
             if (locale == null)
                 throw new ArgumentNullException(nameof(locale));
             var context = Assembly.GetCallingAssembly().FullName;
-            return InnerTranslatePlural(locale, singular, plural, quantity, context);
+            return InnerTranslatePlural(locale, context, quantity, none, singular, plurals);
         }
 
         static TranslatorInChain _chain;
@@ -92,8 +99,7 @@ namespace Commons.Translation
         static string FindAndTranslate(Func<TranslatorInChain, string> use, string context)
         {
             var translator = _chain;
-            while (translator != null && (context == "*" || translator.Context == context))
-            {
+            while (translator != null && (context == "*" || translator.Context == context)) {
                 var result = use?.Invoke(translator);
                 if (result != null)
                     return result;
@@ -102,33 +108,26 @@ namespace Commons.Translation
             return (context != "*") ? FindAndTranslate(use, "*") : null;
         }
 
-        static string InnerFormat(string locale, string textToTranslate, object[] args, string context)
+        static string InnerFormat(string locale, string context, string textToTranslate, object[] args)
         {
             if (locale == null)
                 throw new ArgumentNullException(nameof(locale));
-            if (string.IsNullOrWhiteSpace(textToTranslate))
-                return textToTranslate;
-            return string.Format(CultureInfo.GetCultureInfo(locale), InnerTranslate(locale, textToTranslate, context), args);
+            return textToTranslate.TransformOrNot(s => string.Format(CultureInfo.GetCultureInfo(locale), InnerTranslate(locale, context, s), args));
         }
 
-        static string InnerTranslate(string locale, string textToTranslate, string context)
-        {
-            if (string.IsNullOrWhiteSpace(textToTranslate))
-                return textToTranslate;
-            return FindAndTranslate((tr) => tr.Translate(locale, textToTranslate), context)
-                ?? textToTranslate;
-        }
+        static string InnerTranslate(string locale, string context, string textToTranslate) =>
+            textToTranslate.TransformOrNot(s => FindAndTranslate(tr => tr.Translate(locale, s), context));
 
-        static string InnerTranslatePlural(string locale, string singular, string plural, int quantity, string context)
+        static string InnerTranslatePlural(string locale, string context, int quantity, string none, string singular, params string[] plurals)
         {
             if (singular == null)
                 throw new ArgumentNullException(nameof(singular));
-            if (plural == null)
-                throw new ArgumentNullException(nameof(plural));
-            if (quantity < 1)
+            if (plurals == null)
+                throw new ArgumentNullException(nameof(plurals));
+            if (quantity < 0 || (quantity == 0 && none.IsEmpty()))
                 throw new ArgumentOutOfRangeException(nameof(quantity));
-            return FindAndTranslate((tr) => tr.TranslatePlural(locale, singular, plural, quantity), context)
-                ?? ((quantity == 1) ? singular : plural);
+            return FindAndTranslate((tr) => tr.TranslatePlural(locale, quantity, none, singular, plurals), context)
+                ?? DefaultPlural(quantity, none, singular, plurals);
         }
 
         class TranslatorInChain : ITranslator
@@ -145,7 +144,8 @@ namespace Commons.Translation
 
             public string Translate(string locale, string textToTranslate) => _translator.Translate(locale, textToTranslate);
 
-            public string TranslatePlural(string locale, string singular, string plural, int quantity) => _translator.TranslatePlural(locale, singular, plural, quantity);
+            public string TranslatePlural(string locale, int quantity, string none, string singular, params string[] plurals)
+                => _translator.TranslatePlural(locale, quantity, none, singular, plurals);
 
             readonly ITranslator _translator;
         }

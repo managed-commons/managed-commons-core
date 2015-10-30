@@ -63,6 +63,9 @@
   <ItemGroup>
     <Compile Include="AssemblyInformationTests.cs" />
     <Compile Include="Commons.Text\StringBuilderExtensionsTests.cs" />
+    <Compile Include="Commons.Text\IEnumerableOfStringExtensionsTests.cs" />
+    <Compile Include="Commons.Text\StringExtensionsTests.cs" />
+    <Compile Include="Commons.Text\TestUtils.cs" />
     <Compile Include="Commons\LicenseAttributeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TranslationServiceTests.cs" />

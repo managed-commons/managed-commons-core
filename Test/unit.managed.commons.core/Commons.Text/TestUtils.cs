@@ -21,14 +21,23 @@
 // SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using NUnit.Framework;
 
-namespace Commons.Translation
+namespace Commons.Commons.Text
 {
-    public interface ITranslator
+    public static class TestUtils
     {
-        string Translate(string locale, string textToTranslate);
+        public static void CompareStringEnumerable(IEnumerable<string> splitted, params string[] expected)
+        {
+            Assert.That(splitted, Is.Not.Null);
+            Assert.That(splitted.Count(), Is.EqualTo(expected.Length));
+            int i = 0;
+            foreach (string s in splitted)
+                Assert.That(s, Is.EqualTo(expected[i++]));
+        }
 
-        string TranslatePlural(string locale, int quantity, string none, string singular, params string[] plurals);
+        public static string[] ToArray(params string[] data) => data;
     }
 }

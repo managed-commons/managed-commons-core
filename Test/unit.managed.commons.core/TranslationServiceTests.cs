@@ -35,8 +35,26 @@ namespace Commons
         static TranslationServiceTests()
         {
             var translator = new DictionaryTranslator();
-            translator.AddLocale("pt-BR", new Dictionary<string, string> {["Hello {0}!!!"] = "Alô {0}!!!",["See {0}"] = "Mais detalhes em {0}" });
-            translator.AddLocale("es", new Dictionary<string, string> {["Hello {0}!!!"] = "Hola {0}!!!",["See {0}"] = "Siga {0}" });
+            translator.AddLocale("pt-BR", new Dictionary<string, string>
+            {
+                ["Hello {0}!!!"] = "Alô {0}!!!",
+                ["See {0}"] = "Mais detalhes em {0}",
+                ["Value {0:000} at {1:f}!!!"] = "Valor {0:000} em {1:f}!!!",
+                ["Nothing"] = "Nada",
+                ["One"] = "Um",
+                ["Two"] = "Dois",
+                ["Many"] = "Muitos"
+            });
+            translator.AddLocale("es", new Dictionary<string, string>
+            {
+                ["Hello {0}!!!"] = "Hola {0}!!!",
+                ["See {0}"] = "Siga {0}",
+                ["Value {0:000} at {1:f}!!!"] = "Valor {0:000} en {1:f}!!!",
+                ["Nothing"] = "Nada",
+                ["One"] = "Un",
+                ["Two"] = "Dos",
+                ["Many"] = "Muchos"
+            });
             RegisterTranslator(translator);
         }
 
@@ -65,6 +83,24 @@ namespace Commons
         }
 
         [Test]
+        public void TestInterpolatedStringWithFormatSpecifierNonTranslation()
+        {
+            TestInterpolatedStringWithFormatSpecifier("en-US", "Value 013 at Friday, October 30, 2015 7:40 PM!!!");
+        }
+
+        [Test]
+        public void TestInterpolatedStringWithFormatSpecifierPortugueseBrazilianTranslation()
+        {
+            TestInterpolatedStringWithFormatSpecifier("pt-BR", "Valor 013 em sexta-feira, 30 de outubro de 2015 19:40!!!");
+        }
+
+        [Test]
+        public void TestInterpolatedStringWithFormatSpecifierSpanishTranslation()
+        {
+            TestInterpolatedStringWithFormatSpecifier("es", "Valor 013 en viernes, 30 de octubre de 2015 19:40!!!");
+        }
+
+        [Test]
         public void TestLicenseAttributeTranslation()
         {
             using (new TranslationServiceLocaleLock("pt-BR")) {
@@ -73,11 +109,51 @@ namespace Commons
             }
         }
 
+        [Test]
+        public void TestPluralsNonTranslation()
+        {
+            TestPlurals("en-US", "Nothing", "One", "Two", "Many");
+        }
+
+        [Test]
+        public void TestPluralsPortugueseBrazilianTranslation()
+        {
+            TestPlurals("pt-BR", "Nada", "Um", "Dois", "Muitos");
+        }
+
+        [Test]
+        public void TestPluralsSpanishTranslation()
+        {
+            TestPlurals("es", "Nada", "Un", "Dos", "Muchos");
+        }
+
         static void TestHelloDavidFowler(string locale, string expected)
         {
             using (new TranslationServiceLocaleLock(locale)) {
                 const string name = "David Fowler";
                 Assert.AreEqual(expected, __($"Hello {name}!!!"));
+            }
+        }
+
+        static void TestInterpolatedStringWithFormatSpecifier(string locale, string expected)
+        {
+            using (new TranslationServiceLocaleLock(locale)) {
+                const int value = 13;
+                var datetime = new DateTime(2015, 10, 30, 19, 40, 0);
+                Assert.AreEqual(expected, __($"Value {value:000} at {datetime:f}!!!"));
+            }
+        }
+
+        static void TestPlurals(string locale, string expectedNone, string expectedOne, string expectedTwo, string expectedMany)
+        {
+            using (new TranslationServiceLocaleLock(locale)) {
+                Assert.AreEqual(expectedNone, _s(0, "Nothing", "One", "Two", "Many"));
+                Assert.AreEqual(expectedOne, _s(1, "Nothing", "One", "Two", "Many"));
+                Assert.AreEqual(expectedTwo, _s(2, "Nothing", "One", "Two", "Many"));
+                Assert.AreEqual(expectedMany, _s(3, "Nothing", "One", "Two", "Many"));
+                Assert.AreEqual(expectedMany, _s(2, "Nothing", "One", "Many"));
+                Assert.AreEqual("Three", _s(3, "Nothing", "One", "Two", "Three", "Many"));
+                Assert.AreEqual(expectedMany, _s(4, "Nothing", "One", "Two", "Three", "Many"));
             }
         }
     }

@@ -21,14 +21,31 @@
 // SOFTWARE.
 
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
-namespace Commons.Translation
+namespace Commons.Text
 {
-    public interface ITranslator
+    public static class TextReaderExtensions
     {
-        string Translate(string locale, string textToTranslate);
+        public static void ForEachLine(this TextReader reader, Action<string> process)
+        {
+            using (reader)
+                foreach (string line in reader.Lines())
+                    process(line);
+        }
 
-        string TranslatePlural(string locale, int quantity, string none, string singular, params string[] plurals);
+        public static IEnumerable<string> Lines(this TextReader reader)
+        {
+            if (reader == null)
+                yield break;
+            while (true) {
+                string line = reader.ReadLine();
+                if (line == null)
+                    yield break;
+                yield return line.Trim();
+            }
+        }
     }
 }

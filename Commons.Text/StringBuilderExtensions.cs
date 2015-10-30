@@ -50,6 +50,12 @@ namespace Commons.Text
             return sb;
         }
 
+        public static string ToString(this StringBuilder sb, Action<StringBuilder> magic)
+        {
+            magic(sb);
+            return sb.ToString();
+        }
+
         public static StringBuilder TrimLastSeparatorPreservingWhitespace(this StringBuilder sb, char separator = ',')
         {
             for (int j = sb.Length - 1; j > 0; j--) {
@@ -61,6 +67,25 @@ namespace Commons.Text
                 }
             }
             return sb;
+        }
+
+        public static StringBuilder TruncateAt(this StringBuilder sb, int width)
+        {
+            if (sb.Length > width)
+                sb.Remove(width, sb.Length - width);
+            return sb;
+        }
+
+        internal static void FromSpacedWordsToCapitalizedWords(this StringBuilder sb, string text, bool capitalizeNextChar)
+        {
+            foreach (char c in text) {
+                if (char.IsWhiteSpace(c) && sb.Length > 0)
+                    capitalizeNextChar = true;
+                else {
+                    sb.Append(capitalizeNextChar ? char.ToUpperInvariant(c) : c);
+                    capitalizeNextChar = false;
+                }
+            }
         }
     }
 }

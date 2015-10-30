@@ -74,8 +74,7 @@ namespace Commons
                 Description = Description ?? "Add a [assembly: AssemblyDescription(\"Here goes the short description\")] to your assembly";
                 Title = Title ?? "Add a [assembly: AssemblyTitle(\"Here goes the application name\")] to your assembly";
                 Product = Product ?? "Add a [assembly: AssemblyProduct(\"Here goes the product/parent project name\")] to your assembly";
-                if (Authors == null)
-                {
+                if (Authors == null) {
                     var authors = new String[1];
                     authors[0] = "Add [assembly: AssemblyCompany(\"Here goes the authors' names, separated by commas\")] to your assembly";
                     Authors = authors;

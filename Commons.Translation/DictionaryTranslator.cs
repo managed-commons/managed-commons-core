@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Commons.Translation
 {
@@ -33,8 +34,7 @@ namespace Commons.Translation
             if (_.ContainsKey(locale))
                 throw new ArgumentException("Locale already added!!!", nameof(locale));
             _[locale] = dictionary;
-            if (locale.Contains("-"))
-            {
+            if (locale.Contains("-")) {
                 locale = LanguageFrom(locale);
                 if (!_.ContainsKey(locale))
                     _[locale] = dictionary;
@@ -43,7 +43,8 @@ namespace Commons.Translation
 
         public string Translate(string locale, string textToTranslate) => InnerTranslate(locale, textToTranslate);
 
-        public string TranslatePlural(string locale, string singular, string plural, int quantity) => quantity == 1 ? InnerTranslate(locale, singular) : InnerTranslate(locale, plural);
+        public string TranslatePlural(string locale, int quantity, string none, string singular, params string[] plurals)
+        => TranslationService.DefaultPlural(quantity, InnerTranslate(locale, none), InnerTranslate(locale, singular), InnerTranslate(locale, plurals));
 
         readonly Dictionary<string, Dictionary<string, string>> _ = new Dictionary<string, Dictionary<string, string>>();
 
@@ -56,11 +57,12 @@ namespace Commons.Translation
             return locale.ToLower();
         }
 
+        string[] InnerTranslate(string locale, string[] plurals) => plurals.Select(s => InnerTranslate(locale, s)).ToArray();
+
         string InnerTranslate(string locale, string textToTranslate)
         {
             locale = ValidateAndNormalizeLocale(locale);
-            if (_.ContainsKey(locale))
-            {
+            if (_.ContainsKey(locale)) {
                 var dic = _[locale];
                 if (dic.ContainsKey(textToTranslate))
                     return dic[textToTranslate];

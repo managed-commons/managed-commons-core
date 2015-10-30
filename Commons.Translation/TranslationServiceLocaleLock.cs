@@ -54,17 +54,13 @@ namespace Commons.Translation
 
         static void ProcessExit(object sender, EventArgs e)
         {
-            try
-            {
+            try {
                 var l = _lock;
-                if (l != null)
-                {
+                if (l != null) {
                     l.Dispose();
                     _lock = null;
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 System.Diagnostics.Debug.WriteLine(ex);
             }
         }

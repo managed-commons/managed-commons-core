@@ -21,14 +21,23 @@
 // SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
-namespace Commons.Translation
+namespace Commons.Text
 {
-    public interface ITranslator
+    public static class IEnumerableOfStringExtensions
     {
-        string Translate(string locale, string textToTranslate);
+        public static IEnumerable<string> ExceptThese(this IEnumerable<string> list, params string[] exceptions) => list.Except(exceptions);
 
-        string TranslatePlural(string locale, int quantity, string none, string singular, params string[] plurals);
+        public static string JoinWith(this IEnumerable<string> itens, string connector) => string.Join(connector ?? string.Empty, itens);
+
+        public static IEnumerable<string> NoBlanks(this IEnumerable<string> list) => list.Where(s => !s.IsOnlyWhiteSpace());
+
+        public static IEnumerable<string> ToLower(this IEnumerable<string> list) => list.Select(s => s == null ? string.Empty : s.ToLowerInvariant());
+
+        public static IEnumerable<string> ToUpper(this IEnumerable<string> list) => list.Select(s => s == null ? string.Empty : s.ToUpperInvariant());
+
+        public static IEnumerable<string> TrimAll(this IEnumerable<string> list) => list.Select(s => s == null ? string.Empty : s.Trim());
     }
 }
