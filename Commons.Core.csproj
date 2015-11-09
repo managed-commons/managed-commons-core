@@ -36,11 +36,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assembly\AssemblyInfo.cs" />
@@ -62,9 +58,6 @@
     <Compile Include="Commons.Text\StringBuilderExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include=".travis.yml" />
-    <None Include="build.sh" />
-    <None Include="Commons.Core.nuspec" />
     <None Include="LICENSE" />
     <None Include="README.md" />
   </ItemGroup>

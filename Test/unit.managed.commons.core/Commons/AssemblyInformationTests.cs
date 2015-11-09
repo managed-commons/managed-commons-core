@@ -33,8 +33,7 @@ namespace Commons
         [Test]
         public void ToStringOnSimpleAssemblyInfo()
         {
-            using (new TranslationServiceLocaleLock("en-US"))
-            {
+            using (new TranslationServiceLocaleLock("en-US")) {
                 var info = new AssemblyInformation(typeof(AssemblyInformationTests).Assembly);
                 var version = info.Version;
                 var expected = $@"
