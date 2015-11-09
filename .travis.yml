@@ -1,6 +1,6 @@
 language: csharp
 mono:
-  - latest
+  - beta
 sudo: false  # use the new container-based infrastructure
 script:
   - . ./build.sh
