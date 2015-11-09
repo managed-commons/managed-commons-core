@@ -59,6 +59,42 @@ namespace Commons
         }
 
         [Test]
+        public void TestFailInterpolatedStringArgentinianSpanishTranslation()
+        {
+            TestFailDavidFowler("es-AR");
+        }
+
+        [Test]
+        public void TestFailInterpolatedStringNonTranslation()
+        {
+            TestFailDavidFowler("en-US");
+        }
+
+        [Test]
+        public void TestFailInterpolatedStringPortugueseBrazilianTranslation()
+        {
+            TestFailDavidFowler("pt-BR");
+        }
+
+        [Test]
+        public void TestFailPluralsNonTranslation()
+        {
+            TestFailPlurals("en-US");
+        }
+
+        [Test]
+        public void TestFailPluralsPortugueseBrazilianTranslation()
+        {
+            TestFailPlurals("pt-BR");
+        }
+
+        [Test]
+        public void TestFailPluralsSpanishTranslation()
+        {
+            TestFailPlurals("es");
+        }
+
+        [Test]
         public void TestInterpolatedStringArgentinianSpanishTranslation()
         {
             TestHelloDavidFowler("es-AR", "Hola David Fowler!!!");
@@ -125,6 +161,49 @@ namespace Commons
         public void TestPluralsSpanishTranslation()
         {
             TestPlurals("es", "Nada", "Un", "Dos", "Muchos");
+        }
+
+        static void TestFailDavidFowler(string locale)
+        {
+            using (new TranslationServiceLocaleLock(locale)) {
+                var catched = 0;
+                LocalizationWarningEventHandler handler = (LocalizationWarningEventArgs e) => {
+                    catched++;
+                    Assert.AreEqual(locale, e.LanguageName);
+                    Assert.AreEqual("Fail {0}!!!", e.MissingText);
+                    if (e.Context != "*")
+                        Assert.That(e.Context, Is.StringStarting("Unit.Commons.Core, Version="));
+                };
+                ProblemDetected += handler;
+                try {
+                    const string name = "David Fowler";
+                    Assert.IsNotNullOrEmpty(__($"Fail {name}!!!"));
+                    Assert.AreEqual(2, catched);
+                } finally {
+                    ProblemDetected -= handler;
+                }
+            }
+        }
+
+        static void TestFailPlurals(string locale)
+        {
+            using (new TranslationServiceLocaleLock(locale)) {
+                var catched = 0;
+                LocalizationWarningEventHandler handler = (LocalizationWarningEventArgs e) => {
+                    catched++;
+                    Assert.AreEqual(locale, e.LanguageName);
+                    Assert.AreEqual("No thing|One|Two|Many", e.MissingText);
+                    if (e.Context != "*")
+                        Assert.That(e.Context, Is.StringStarting("Unit.Commons.Core, Version="));
+                };
+                ProblemDetected += handler;
+                try {
+                    Assert.IsNotNullOrEmpty(_s(0, "No thing", "One", "Two", "Many"));
+                    Assert.AreEqual(2, catched);
+                } finally {
+                    ProblemDetected -= handler;
+                }
+            }
         }
 
         static void TestHelloDavidFowler(string locale, string expected)

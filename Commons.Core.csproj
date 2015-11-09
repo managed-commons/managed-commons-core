@@ -45,6 +45,7 @@
     <Compile Include="Commons.Text\TextReaderExtensions.cs" />
     <Compile Include="Commons.Translation\DictionaryTranslator.cs" />
     <Compile Include="Commons.Translation\ITranslator.cs" />
+    <Compile Include="Commons.Translation\LocalizationWarningEventHandler.cs" />
     <Compile Include="Commons.Translation\TranslatableAttribute.cs" />
     <Compile Include="Commons.Translation\TranslationServiceLocaleLock.cs" />
     <Compile Include="Commons\AboutAttribute.cs" />

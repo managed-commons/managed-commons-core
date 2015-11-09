@@ -30,6 +30,8 @@ namespace Commons.Translation
 {
     public static class TranslationService
     {
+        public static event LocalizationWarningEventHandler ProblemDetected;
+
         public static string Locale { get { return _locale ?? Thread.CurrentThread.CurrentCulture.Name; } set { _locale = value != null ? CultureInfo.GetCultureInfo(value).Name : null; } }
 
         public static string _([Translatable] string textToTranslate)
@@ -96,16 +98,19 @@ namespace Commons.Translation
 
         static string _locale;
 
-        static string FindAndTranslate(Func<TranslatorInChain, string> use, string context)
+        static string FindAndTranslate(Func<TranslatorInChain, string, string> use, string languageName, string context, string text)
         {
             var translator = _chain;
             while (translator != null && (context == "*" || translator.Context == context)) {
-                var result = use?.Invoke(translator);
+                var result = use?.Invoke(translator, languageName);
                 if (result != null)
                     return result;
                 translator = translator.Next;
             }
-            return (context != "*") ? FindAndTranslate(use, "*") : null;
+            var translated = (context != "*") ? FindAndTranslate(use, languageName, "*", text) : null;
+            if (translated == null)
+                RaiseProblemDetectedEvent(languageName, context, text);
+            return translated;
         }
 
         static string InnerFormat(string locale, string context, string textToTranslate, object[] args)
@@ -116,7 +121,7 @@ namespace Commons.Translation
         }
 
         static string InnerTranslate(string locale, string context, string textToTranslate) =>
-            textToTranslate.TransformOrNot(s => FindAndTranslate(tr => tr.Translate(locale, s), context));
+            textToTranslate.TransformOrNot(s => FindAndTranslate((tr, language) => tr.Translate(language, s), locale, context, textToTranslate));
 
         static string InnerTranslatePlural(string locale, string context, int quantity, string none, string singular, params string[] plurals)
         {
@@ -126,8 +131,14 @@ namespace Commons.Translation
                 throw new ArgumentNullException(nameof(plurals));
             if (quantity < 0 || (quantity == 0 && none.IsEmpty()))
                 throw new ArgumentOutOfRangeException(nameof(quantity));
-            return FindAndTranslate((tr) => tr.TranslatePlural(locale, quantity, none, singular, plurals), context)
+            return FindAndTranslate((tr, language) => tr.TranslatePlural(language, quantity, none, singular, plurals), locale, context, none + "|" + singular + "|" + plurals.JoinWith("|"))
                 ?? DefaultPlural(quantity, none, singular, plurals);
+        }
+
+        static void RaiseProblemDetectedEvent(string languageName, string context, string missingText)
+        {
+            if (ProblemDetected != null)
+                ProblemDetected(new LocalizationWarningEventArgs(languageName, context, missingText));
         }
 
         class TranslatorInChain : ITranslator
