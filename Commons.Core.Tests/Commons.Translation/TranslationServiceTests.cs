@@ -172,12 +172,12 @@ namespace Commons
                     Assert.AreEqual(locale, e.LanguageName);
                     Assert.AreEqual("Fail {0}!!!", e.MissingText);
                     if (e.Context != "*")
-                        Assert.That(e.Context, Is.StringStarting("Unit.Commons.Core, Version="));
+                        Assert.That(e.Context, Does.StartWith("Unit.Commons.Core, Version="));
                 };
                 ProblemDetected += handler;
                 try {
                     const string name = "David Fowler";
-                    Assert.IsNotNullOrEmpty(__($"Fail {name}!!!"));
+                    Assert.IsNotEmpty(__($"Fail {name}!!!"));
                     Assert.AreEqual(2, catched);
                 } finally {
                     ProblemDetected -= handler;
@@ -194,11 +194,11 @@ namespace Commons
                     Assert.AreEqual(locale, e.LanguageName);
                     Assert.AreEqual("No thing|One|Two|Many", e.MissingText);
                     if (e.Context != "*")
-                        Assert.That(e.Context, Is.StringStarting("Unit.Commons.Core, Version="));
+                        Assert.That(e.Context, Does.StartWith("Unit.Commons.Core, Version="));
                 };
                 ProblemDetected += handler;
                 try {
-                    Assert.IsNotNullOrEmpty(_s(0, "No thing", "One", "Two", "Many"));
+                    Assert.IsNotEmpty(_s(0, "No thing", "One", "Two", "Many"));
                     Assert.AreEqual(2, catched);
                 } finally {
                     ProblemDetected -= handler;

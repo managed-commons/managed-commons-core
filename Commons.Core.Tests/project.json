@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "Commons.Core": "1.0.0-*",
+    "NUnit": "3.0.0"
+  },
+  "frameworks": {
+    "net46": { }
+  }
+}

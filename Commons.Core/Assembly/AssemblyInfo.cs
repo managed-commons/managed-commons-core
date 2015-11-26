@@ -37,7 +37,7 @@ using Commons;
 [assembly: ComVisible(false)]
 [assembly: AssemblyVersion("2.0.0")]
 [assembly: AssemblyFileVersion("2.0.0")]
-[assembly: AssemblyInformationalVersion("2.0.0-Beta1")]
+[assembly: AssemblyInformationalVersion("2.0.0-Beta2")]
 [assembly: License(LicenseType.MIT)]
 [assembly: About("The basics")]
 [assembly: IsPartOfPackage("Managed Commons")]

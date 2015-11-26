@@ -15,9 +15,9 @@ namespace Commons.Tests
             Assert.AreEqual(true, attr.IsProprietary);
             Assert.AreEqual("name", attr.Name);
             var text = attr.ToString();
-            Assert.That(text, Is.StringContaining("name"));
-            Assert.That(text, Is.StringContaining("details"));
-            Assert.That(text, Is.StringContaining("nowhere"));
+            Assert.That(text, Does.Contain("name"));
+            Assert.That(text, Does.Contain("details"));
+            Assert.That(text, Does.Contain("nowhere"));
         }
 
         [Test]

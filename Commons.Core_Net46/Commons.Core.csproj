@@ -39,28 +39,24 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assembly\AssemblyInfo.cs" />
-    <Compile Include="Commons.Text\IEnumerableOfStringExtensions.cs" />
-    <Compile Include="Commons.Text\StringExtensions.cs" />
-    <Compile Include="Commons.Text\TextReaderExtensions.cs" />
-    <Compile Include="Commons.Translation\DictionaryTranslator.cs" />
-    <Compile Include="Commons.Translation\ITranslator.cs" />
-    <Compile Include="Commons.Translation\LocalizationWarningEventHandler.cs" />
-    <Compile Include="Commons.Translation\TranslatableAttribute.cs" />
-    <Compile Include="Commons.Translation\TranslationServiceLocaleLock.cs" />
-    <Compile Include="Commons\AboutAttribute.cs" />
-    <Compile Include="Commons\AdditionalInfoAttribute.cs" />
-    <Compile Include="Commons.Reflection\AssemblyExtensions.cs" />
-    <Compile Include="Commons\AssemblyInformation.cs" />
-    <Compile Include="Commons\IsPartOfPackageAttribute.cs" />
-    <Compile Include="Commons\LicenseAttribute.cs" />
-    <Compile Include="Commons\ReportBugsToAttribute.cs" />
-    <Compile Include="Commons.Translation\TranslationService.cs" />
-    <Compile Include="Commons.Text\StringBuilderExtensions.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="LICENSE" />
-    <None Include="README.md" />
+    <Compile Include="..\Commons.Core\Assembly\AssemblyInfo.cs" />
+    <Compile Include="..\Commons.Core\Commons.Reflection\AssemblyExtensions.cs" />
+    <Compile Include="..\Commons.Core\Commons.Text\IEnumerableOfStringExtensions.cs" />
+    <Compile Include="..\Commons.Core\Commons.Text\StringBuilderExtensions.cs" />
+    <Compile Include="..\Commons.Core\Commons.Text\StringExtensions.cs" />
+    <Compile Include="..\Commons.Core\Commons.Text\TextReaderExtensions.cs" />
+    <Compile Include="..\Commons.Core\Commons.Translation\DictionaryTranslator.cs" />
+    <Compile Include="..\Commons.Core\Commons.Translation\ITranslator.cs" />
+    <Compile Include="..\Commons.Core\Commons.Translation\LocalizationWarningEventHandler.cs" />
+    <Compile Include="..\Commons.Core\Commons.Translation\TranslatableAttribute.cs" />
+    <Compile Include="..\Commons.Core\Commons.Translation\TranslationService.cs" />
+    <Compile Include="..\Commons.Core\Commons.Translation\TranslationServiceLocaleLock.cs" />
+    <Compile Include="..\Commons.Core\Commons\AboutAttribute.cs" />
+    <Compile Include="..\Commons.Core\Commons\AdditionalInfoAttribute.cs" />
+    <Compile Include="..\Commons.Core\Commons\AssemblyInformation.cs" />
+    <Compile Include="..\Commons.Core\Commons\IsPartOfPackageAttribute.cs" />
+    <Compile Include="..\Commons.Core\Commons\LicenseAttribute.cs" />
+    <Compile Include="..\Commons.Core\Commons\ReportBugsToAttribute.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
