@@ -26,6 +26,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Reflection;
 
 namespace Commons.Text
 {
@@ -164,12 +165,23 @@ namespace Commons.Text
           where T : IConvertible
         {
             try {
-                if (typeof(T).IsEnum)
+                if (IsEnum<T>())
                     return ParseEnumIgnoringCase(s, defaultValue);
                 return (T)(Convert.ChangeType(s, typeof(T)));
             } catch (Exception) {
                 return defaultValue;
             }
+        }
+
+#pragma warning disable CSE0003 // Use expression-bodied members
+        static bool IsEnum<T>() where T : IConvertible
+#pragma warning restore CSE0003 // Use expression-bodied members
+        {
+#if NET46
+            return typeof(T).IsEnum;
+#else
+            return typeof(T).GetTypeInfo().IsEnum;
+#endif
         }
 
         static string Rebuild(this string s, Action<StringBuilder> magic) => new StringBuilder(s.Length).ToString(magic);

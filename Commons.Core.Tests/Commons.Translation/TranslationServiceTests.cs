@@ -55,7 +55,7 @@ namespace Commons
                 ["Two"] = "Dos",
                 ["Many"] = "Muchos"
             });
-            RegisterTranslator(translator);
+            RegisterTranslator(translator, Context);
         }
 
         [Test]
@@ -163,6 +163,8 @@ namespace Commons
             TestPlurals("es", "Nada", "Un", "Dos", "Muchos");
         }
 
+        const string Context = "Unit.Commons.Core";
+
         static void TestFailDavidFowler(string locale)
         {
             using (new TranslationServiceLocaleLock(locale)) {
@@ -172,12 +174,12 @@ namespace Commons
                     Assert.AreEqual(locale, e.LanguageName);
                     Assert.AreEqual("Fail {0}!!!", e.MissingText);
                     if (e.Context != "*")
-                        Assert.That(e.Context, Does.StartWith("Unit.Commons.Core, Version="));
+                        Assert.AreEqual(Context, e.Context);
                 };
                 ProblemDetected += handler;
                 try {
                     const string name = "David Fowler";
-                    Assert.IsNotEmpty(__($"Fail {name}!!!"));
+                    Assert.IsNotEmpty(__($"Fail {name}!!!", Context));
                     Assert.AreEqual(2, catched);
                 } finally {
                     ProblemDetected -= handler;
@@ -194,11 +196,11 @@ namespace Commons
                     Assert.AreEqual(locale, e.LanguageName);
                     Assert.AreEqual("No thing|One|Two|Many", e.MissingText);
                     if (e.Context != "*")
-                        Assert.That(e.Context, Does.StartWith("Unit.Commons.Core, Version="));
+                        Assert.AreEqual(Context, e.Context);
                 };
                 ProblemDetected += handler;
                 try {
-                    Assert.IsNotEmpty(_s(0, "No thing", "One", "Two", "Many"));
+                    Assert.IsNotEmpty(_s(Context, 0, "No thing", "One", "Two", "Many"));
                     Assert.AreEqual(2, catched);
                 } finally {
                     ProblemDetected -= handler;
@@ -226,13 +228,13 @@ namespace Commons
         static void TestPlurals(string locale, string expectedNone, string expectedOne, string expectedTwo, string expectedMany)
         {
             using (new TranslationServiceLocaleLock(locale)) {
-                Assert.AreEqual(expectedNone, _s(0, "Nothing", "One", "Two", "Many"));
-                Assert.AreEqual(expectedOne, _s(1, "Nothing", "One", "Two", "Many"));
-                Assert.AreEqual(expectedTwo, _s(2, "Nothing", "One", "Two", "Many"));
-                Assert.AreEqual(expectedMany, _s(3, "Nothing", "One", "Two", "Many"));
-                Assert.AreEqual(expectedMany, _s(2, "Nothing", "One", "Many"));
-                Assert.AreEqual("Three", _s(3, "Nothing", "One", "Two", "Three", "Many"));
-                Assert.AreEqual(expectedMany, _s(4, "Nothing", "One", "Two", "Three", "Many"));
+                Assert.AreEqual(expectedNone, _s(Context, 0, "Nothing", "One", "Two", "Many"));
+                Assert.AreEqual(expectedOne, _s(Context, 1, "Nothing", "One", "Two", "Many"));
+                Assert.AreEqual(expectedTwo, _s(Context, 2, "Nothing", "One", "Two", "Many"));
+                Assert.AreEqual(expectedMany, _s(Context, 3, "Nothing", "One", "Two", "Many"));
+                Assert.AreEqual(expectedMany, _s(Context, 2, "Nothing", "One", "Many"));
+                Assert.AreEqual("Three", _s(Context, 3, "Nothing", "One", "Two", "Three", "Many"));
+                Assert.AreEqual(expectedMany, _s(Context, 4, "Nothing", "One", "Two", "Three", "Many"));
             }
         }
     }

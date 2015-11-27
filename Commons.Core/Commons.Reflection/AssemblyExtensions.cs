@@ -21,6 +21,7 @@
 // SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -33,7 +34,7 @@ namespace Commons.Reflection
 
         public static T GetAttribute<T>(this Assembly assembly) where T : Attribute => (T)assembly?.GetAttributes<T>()?.FirstOrDefault();
 
-        public static object[] GetAttributes<T>(this Assembly assembly) => assembly?.GetCustomAttributes(typeof(T), false);
+        public static IEnumerable<Attribute> GetAttributes<T>(this Assembly assembly) where T : Attribute => assembly?.GetCustomAttributes(typeof(T));
 
         public static TReturn GetAttributeValue<T, TReturn>(this Assembly assembly, Func<T, TReturn> getter) where T : Attribute
         {

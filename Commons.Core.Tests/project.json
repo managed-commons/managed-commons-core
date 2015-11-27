@@ -4,6 +4,7 @@
     "NUnit": "3.0.0"
   },
   "frameworks": {
-    "net46": { }
+    "net46": { },
+    "dnxcore50":{}
   }
 }

@@ -31,8 +31,10 @@ namespace Commons.Translation
         static TranslationServiceLocaleLock()
         {
             _lock = new SemaphoreSlim(1, 1);
+#if NET46
             AppDomain.CurrentDomain.DomainUnload += ProcessExit;
             AppDomain.CurrentDomain.ProcessExit += ProcessExit;
+#endif
         }
 
         public TranslationServiceLocaleLock(string locale)

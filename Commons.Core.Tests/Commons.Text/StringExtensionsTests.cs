@@ -118,28 +118,34 @@ namespace Commons.Text.Tests
             Assert.That("12345678901234567890".AtMost(10), Is.EqualTo("1234567890"));
         }
 
-        [Test, SetCulture("en-US")]
+        [Test]
+#if NET46
+        [SetCulture("en-US")]
+#endif
         public void TestContains()
         {
-            Assert.That(((string)null).Contains(null, StringComparison.InvariantCulture), Is.True);
-            Assert.That(string.Empty.Contains(null, StringComparison.InvariantCulture), Is.True);
-            Assert.That("Something".Contains(null, StringComparison.InvariantCulture), Is.True);
-            Assert.That(((string)null).Contains(string.Empty, StringComparison.InvariantCulture), Is.True);
-            Assert.That(string.Empty.Contains(string.Empty, StringComparison.InvariantCulture), Is.True);
-            Assert.That("Something".Contains(string.Empty, StringComparison.InvariantCulture), Is.True);
-            Assert.That(((string)null).Contains("Nothing", StringComparison.InvariantCulture), Is.False);
-            Assert.That(string.Empty.Contains("Nothing", StringComparison.InvariantCulture), Is.False);
-            Assert.That("Something".Contains("Nothing", StringComparison.InvariantCulture), Is.False);
-            Assert.That("Something".Contains("thing", StringComparison.InvariantCulture), Is.True);
-            Assert.That("Something".Contains("Thing", StringComparison.InvariantCulture), Is.False);
-            Assert.That("Something".Contains("Thing", StringComparison.InvariantCultureIgnoreCase), Is.True);
+            Assert.That(((string)null).Contains(null, StringComparison.Ordinal), Is.True);
+            Assert.That(string.Empty.Contains(null, StringComparison.Ordinal), Is.True);
+            Assert.That("Something".Contains(null, StringComparison.Ordinal), Is.True);
+            Assert.That(((string)null).Contains(string.Empty, StringComparison.Ordinal), Is.True);
+            Assert.That(string.Empty.Contains(string.Empty, StringComparison.Ordinal), Is.True);
+            Assert.That("Something".Contains(string.Empty, StringComparison.Ordinal), Is.True);
+            Assert.That(((string)null).Contains("Nothing", StringComparison.Ordinal), Is.False);
+            Assert.That(string.Empty.Contains("Nothing", StringComparison.Ordinal), Is.False);
+            Assert.That("Something".Contains("Nothing", StringComparison.Ordinal), Is.False);
+            Assert.That("Something".Contains("thing", StringComparison.Ordinal), Is.True);
+            Assert.That("Something".Contains("Thing", StringComparison.Ordinal), Is.False);
+            Assert.That("Something".Contains("Thing", StringComparison.OrdinalIgnoreCase), Is.True);
             Assert.That("Something".Contains("Thing", StringComparison.CurrentCulture), Is.False);
             Assert.That("Something".Contains("Thing", StringComparison.CurrentCultureIgnoreCase), Is.True);
             Assert.That("Something".Contains("Thing", StringComparison.Ordinal), Is.False);
             Assert.That("Something".Contains("Thing", StringComparison.OrdinalIgnoreCase), Is.True);
         }
 
-        [Test, SetCulture("en-US")]
+        [Test]
+#if NET46
+        [SetCulture("en-US")]
+#endif
         public void TestFillUpTo()
         {
             Assert.That(((string)null).FillUpTo(8), Is.Empty);

@@ -54,7 +54,6 @@ namespace Commons
         public string Copyright { get; set; }
         public string Description { get; set; }
         public string ExeName { get; set; }
-        public static AssemblyInformation FromEntryAssembly => new AssemblyInformation(Assembly.GetEntryAssembly());
         public LicenseAttribute License { get; set; }
 
         public string Product { get; set; }

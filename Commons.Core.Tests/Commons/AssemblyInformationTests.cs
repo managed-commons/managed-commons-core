@@ -22,6 +22,7 @@
 
 using System;
 using System.Linq;
+using System.Reflection;
 using Commons.Translation;
 using NUnit.Framework;
 
@@ -34,7 +35,8 @@ namespace Commons
         public void ToStringOnSimpleAssemblyInfo()
         {
             using (new TranslationServiceLocaleLock("en-US")) {
-                var info = new AssemblyInformation(typeof(AssemblyInformationTests).Assembly);
+                Assembly assembly = ThisAssembly;
+                var info = new AssemblyInformation(assembly);
                 var version = info.Version;
                 var expected = $@"
 Unit.Commons.Core  {version} - Copyright ©2002-2015 Rafael 'Monoman' Teixeira, Managed Commons Team
@@ -52,5 +54,13 @@ Please report bugs at <https://github.com/managed-commons/managed-commons-core/i
                 Assert.AreEqual(expected.TrimStart('\r', '\n'), info.ToString());
             }
         }
+
+        static Assembly ThisAssembly =>
+#if NET46
+            typeof(AssemblyInformationTests).Assembly;
+#else
+            typeof(AssemblyInformationTests).GetTypeInfo().Assembly;
+
+#endif
     }
 }
