@@ -142,14 +142,17 @@ namespace Commons
         void AppendDescription(StringBuilder sb)
         {
             sb.AppendLine(_(Description));
-            sb.AppendLineIfNotNull(License, __($"\r\nLicense: {License}"));
+            sb.AppendLineIfNotNull(License, __($@"
+License: {License}"));
             sb.AppendLine();
         }
 
         void AppendFooter(StringBuilder sb)
         {
-            sb.AppendLineIfNotNull(AdditionalInfo, $"\r\n{_(AdditionalInfo)}");
-            sb.AppendLineIfNotNull(ReportBugsTo, __($"\r\nPlease report bugs {ChooseConnector(ReportBugsTo)} <{_(ReportBugsTo)}>"));
+            sb.AppendLineIfNotNull(AdditionalInfo, $@"
+{_(AdditionalInfo)}");
+            sb.AppendLineIfNotNull(ReportBugsTo, __($@"
+Please report bugs {ChooseConnector(ReportBugsTo)} <{_(ReportBugsTo)}>"));
         }
     }
 }
