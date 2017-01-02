@@ -2,5 +2,5 @@ language: csharp
 solution: Commons.Core.sln
 sudo: false  # use the new container-based infrastructure
 script:
-  - xbuild /p:Configuration=Release /property:DoNotPack=true solution-name.sln
+  - xbuild /p:Configuration=Release /property:DoNotPack=true Commons.Core.sln
   - mono ./packages/NUnit.ConsoleRunner.3.5.0/tools/nunit3-console.exe ./Commons.Core.Tests_Net46/bin/Release/Unit.Commons.Core.dll
