@@ -72,7 +72,7 @@
   <Target Name="BeforeBuild">
   </Target>
   -->
-  <Target Name="RunTests" AfterTargets="Build">
+  <Target Name="RunTests" AfterTargets="Build"  Condition="$(DoNotPack)==''" >
     <Exec Command="..\..\..\packages\NUnit.ConsoleRunner.3.5.0\tools\nunit3-console.exe $(AssemblyName).dll" WorkingDirectory="$(OutputPath)" ContinueOnError="false" />
   </Target>
 </Project>
