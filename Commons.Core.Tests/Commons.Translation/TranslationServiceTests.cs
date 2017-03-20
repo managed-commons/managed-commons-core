@@ -169,7 +169,7 @@ namespace Commons
         {
             using (new TranslationServiceLocaleLock(locale)) {
                 var catched = 0;
-                LocalizationWarningEventHandler handler = (LocalizationWarningEventArgs e) => {
+                LocalizationWarningEventHandler handler = (object sender, LocalizationWarningEventArgs e) => {
                     catched++;
                     Assert.AreEqual(locale, e.LanguageName);
                     Assert.AreEqual("Fail {0}!!!", e.MissingText);
@@ -191,7 +191,7 @@ namespace Commons
         {
             using (new TranslationServiceLocaleLock(locale)) {
                 var catched = 0;
-                LocalizationWarningEventHandler handler = (LocalizationWarningEventArgs e) => {
+                LocalizationWarningEventHandler handler = (object sender, LocalizationWarningEventArgs e) => {
                     catched++;
                     Assert.AreEqual(locale, e.LanguageName);
                     Assert.AreEqual("No thing|One|Two|Many", e.MissingText);

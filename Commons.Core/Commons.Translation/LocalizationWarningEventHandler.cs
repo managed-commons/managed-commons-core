@@ -24,9 +24,9 @@ using System;
 
 namespace Commons.Translation
 {
-    public delegate void LocalizationWarningEventHandler(LocalizationWarningEventArgs e);
+    public delegate void LocalizationWarningEventHandler(object sender, LocalizationWarningEventArgs e);
 
-    public class LocalizationWarningEventArgs
+    public class LocalizationWarningEventArgs: EventArgs
     {
         public LocalizationWarningEventArgs(string languageName, string context, string missingText)
         {

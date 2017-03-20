@@ -37,7 +37,7 @@ namespace Commons.Translation
             new CultureInfo(locale);
 #endif
 
-        public static string Locale { get { return _locale ?? CultureInfo.CurrentCulture.Name; } set { _locale = value != null ? GetCultureInfo(value).Name : null; } }
+        public static string Locale { get => _locale ?? CultureInfo.CurrentCulture.Name; set => _locale = value != null ? GetCultureInfo(value).Name : null; }
 
         public static string _([Translatable] string textToTranslate, [TranslationContext] string context = null)
             => InnerTranslate(Locale, context ?? "-", textToTranslate);
@@ -50,7 +50,7 @@ namespace Commons.Translation
 
         public static string __f([TranslationContext] string context, [Translatable] string textToTranslate, params object[] args)
             => InnerFormat(_locale, context ?? "-", textToTranslate, args);
- 
+
         public static string _s([TranslationContext] string context, int quantity, [Translatable] string none, [Translatable] string singular, [Translatable] params string[] plurals)
             => InnerTranslatePlural(Locale, context ?? "-", quantity, none, singular, plurals);
 
@@ -94,7 +94,8 @@ namespace Commons.Translation
         static string FindAndTranslate(Func<TranslatorInChain, string, string> use, string languageName, string context, string text)
         {
             var translator = _chain;
-            while (translator != null && (context == "*" || translator.Context == context)) {
+            while (translator != null && (context == "*" || translator.Context == context))
+            {
                 var result = use?.Invoke(translator, languageName);
                 if (result != null)
                     return result;
@@ -130,8 +131,7 @@ namespace Commons.Translation
 
         static void RaiseProblemDetectedEvent(string languageName, string context, string missingText)
         {
-            if (ProblemDetected != null)
-                ProblemDetected(new LocalizationWarningEventArgs(languageName, context, missingText));
+            ProblemDetected?.Invoke(null, new LocalizationWarningEventArgs(languageName, context, missingText));
         }
 
         class TranslatorInChain : ITranslator

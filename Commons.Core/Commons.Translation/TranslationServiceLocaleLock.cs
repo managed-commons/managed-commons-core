@@ -26,7 +26,7 @@ using System.Threading;
 
 namespace Commons.Translation
 {
-    public class TranslationServiceLocaleLock : IDisposable
+    public sealed class TranslationServiceLocaleLock : IDisposable
     {
         static TranslationServiceLocaleLock()
         {
