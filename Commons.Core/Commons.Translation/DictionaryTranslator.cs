@@ -30,45 +30,47 @@ namespace Commons.Translation
     {
         public void AddLocale(string locale, Dictionary<string, string> dictionary)
         {
+            _AddLocale(locale, dictionary);
+        }
+
+        public string Translate(string locale, string textToTranslate) => _Translate(locale, textToTranslate);
+
+        public string TranslatePlural(string locale, int quantity, string none, string singular, params string[] plurals)
+        => TranslationService.DefaultPlural(quantity, _Translate(locale, none), _Translate(locale, singular), _Translate(locale, plurals));
+
+        private readonly Dictionary<string, Dictionary<string, string>> _ = new Dictionary<string, Dictionary<string, string>>();
+
+        private static string LanguageFrom(string locale) => locale.Split('-')[0];
+
+        private static string ValidateAndNormalizeLocale(string locale) => string.IsNullOrWhiteSpace(locale) ? throw new ArgumentNullException(nameof(locale)) : locale.ToLower();
+
+        private void _AddLocale(string locale, Dictionary<string, string> dictionary)
+        {
             locale = ValidateAndNormalizeLocale(locale);
             if (_.ContainsKey(locale))
                 throw new ArgumentException("Locale already added!!!", nameof(locale));
             _[locale] = dictionary;
-            if (locale.Contains("-")) {
+            if (locale.Contains("-"))
+            {
                 locale = LanguageFrom(locale);
                 if (!_.ContainsKey(locale))
                     _[locale] = dictionary;
             }
         }
 
-        public string Translate(string locale, string textToTranslate) => InnerTranslate(locale, textToTranslate);
+        private string[] _Translate(string locale, string[] plurals) => plurals.Select(s => _Translate(locale, s)).ToArray();
 
-        public string TranslatePlural(string locale, int quantity, string none, string singular, params string[] plurals)
-        => TranslationService.DefaultPlural(quantity, InnerTranslate(locale, none), InnerTranslate(locale, singular), InnerTranslate(locale, plurals));
-
-        readonly Dictionary<string, Dictionary<string, string>> _ = new Dictionary<string, Dictionary<string, string>>();
-
-        static string LanguageFrom(string locale) => locale.Split('-')[0];
-
-        static string ValidateAndNormalizeLocale(string locale)
-        {
-            if (string.IsNullOrWhiteSpace(locale))
-                throw new ArgumentNullException(nameof(locale));
-            return locale.ToLower();
-        }
-
-        string[] InnerTranslate(string locale, string[] plurals) => plurals.Select(s => InnerTranslate(locale, s)).ToArray();
-
-        string InnerTranslate(string locale, string textToTranslate)
+        private string _Translate(string locale, string textToTranslate)
         {
             locale = ValidateAndNormalizeLocale(locale);
-            if (_.ContainsKey(locale)) {
+            if (_.ContainsKey(locale))
+            {
                 var dic = _[locale];
                 if (dic.ContainsKey(textToTranslate))
                     return dic[textToTranslate];
             }
             if (locale.Contains("-"))
-                return InnerTranslate(LanguageFrom(locale), textToTranslate);
+                return _Translate(LanguageFrom(locale), textToTranslate);
             return null;
         }
     }
