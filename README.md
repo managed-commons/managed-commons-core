@@ -18,7 +18,7 @@ __Unstable Commons.Core 2.0.0-Beta1 available as a pre-release Nuget:__ [Commons
 License: MIT
 ------------
 
-Copyright (c) 2002-2015 Rafael 'Monoman' Teixeira, Managed Commons Team
+Copyright (c) 2002-2018 Rafael 'Monoman' Teixeira, Managed Commons Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
