@@ -1,4 +1,4 @@
-﻿// Commons.Core
+// Commons.Core
 //
 // Copyright (c) 2002-2015 Rafael 'Monoman' Teixeira, Managed Commons Team
 //
@@ -29,15 +29,13 @@ namespace Commons.Text
 {
     public static class TextReaderExtensions
     {
-        public static void ForEachLine(this TextReader reader, Action<string> process)
-        {
+        public static void ForEachLine(this TextReader reader, Action<string> process) {
             using (reader)
                 foreach (string line in reader.Lines())
                     process(line);
         }
 
-        public static IEnumerable<string> Lines(this TextReader reader)
-        {
+        public static IEnumerable<string> Lines(this TextReader reader) {
             if (reader == null)
                 yield break;
             while (true) {

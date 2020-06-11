@@ -1,4 +1,4 @@
-﻿// Commons.Core
+// Commons.Core
 //
 // Copyright (c) 2002-2015 Rafael 'Monoman' Teixeira, Managed Commons Team
 //
@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 using System;
-using System.Linq;
 using NUnit.Framework;
 using static Commons.Commons.Text.TestUtils;
 
@@ -31,8 +30,7 @@ namespace Commons.Text.Tests
     public class StringExtensionsTests
     {
         [Test]
-        public void TestAsBool()
-        {
+        public void TestAsBool() {
             Assert.That(((string)null).AsBool(), Is.EqualTo(false));
             Assert.That("".AsBool(), Is.EqualTo(false));
             Assert.That(".".AsBool(), Is.EqualTo(false));
@@ -46,8 +44,7 @@ namespace Commons.Text.Tests
         }
 
         [Test]
-        public void TestAsEnum()
-        {
+        public void TestAsEnum() {
             Assert.That(((string)null).AsEnum(TestEnum.LastValue), Is.EqualTo(TestEnum.LastValue));
             Assert.That("".AsEnum(TestEnum.LastValue), Is.EqualTo(TestEnum.LastValue));
             Assert.That("FirstValue".AsEnum(TestEnum.LastValue), Is.EqualTo(TestEnum.FirstValue));
@@ -60,8 +57,7 @@ namespace Commons.Text.Tests
         }
 
         [Test]
-        public void TestAsInt()
-        {
+        public void TestAsInt() {
             Assert.That(((string)null).AsInt(), Is.EqualTo(0));
             Assert.That("".AsInt(), Is.EqualTo(0));
             Assert.That(".".AsInt(), Is.EqualTo(0));
@@ -73,8 +69,7 @@ namespace Commons.Text.Tests
         }
 
         [Test]
-        public void TestAsLines()
-        {
+        public void TestAsLines() {
             CompareStringEnumerable(((string)null).AsLines());
             CompareStringEnumerable(("").AsLines());
             CompareStringEnumerable(("    ").AsLines(), string.Empty);
@@ -84,8 +79,7 @@ namespace Commons.Text.Tests
         }
 
         [Test]
-        public void TestAsLong()
-        {
+        public void TestAsLong() {
             Assert.That(((string)null).AsLong(), Is.EqualTo(0));
             Assert.That("".AsLong(), Is.EqualTo(0));
             Assert.That(".".AsLong(), Is.EqualTo(0));
@@ -97,8 +91,7 @@ namespace Commons.Text.Tests
         }
 
         [Test]
-        public void TestAsUtf8Bytes()
-        {
+        public void TestAsUtf8Bytes() {
             Assert.That(((string)null).AsUtf8Bytes(), Is.Empty);
             Assert.That("".AsUtf8Bytes(), Is.Empty);
             var bytes = ".".AsUtf8Bytes();
@@ -108,8 +101,7 @@ namespace Commons.Text.Tests
         }
 
         [Test]
-        public void TestAtMost()
-        {
+        public void TestAtMost() {
             Assert.That(((string)null).AtMost(10), Is.Null);
             Assert.That("".AtMost(10), Is.Empty);
             Assert.That(".".AtMost(10), Is.EqualTo("."));
@@ -119,35 +111,8 @@ namespace Commons.Text.Tests
         }
 
         [Test]
-#if NET46
         [SetCulture("en-US")]
-#endif
-        public void TestContains()
-        {
-            Assert.That(((string)null).Contains(null, StringComparison.Ordinal), Is.True);
-            Assert.That(string.Empty.Contains(null, StringComparison.Ordinal), Is.True);
-            Assert.That("Something".Contains(null, StringComparison.Ordinal), Is.True);
-            Assert.That(((string)null).Contains(string.Empty, StringComparison.Ordinal), Is.True);
-            Assert.That(string.Empty.Contains(string.Empty, StringComparison.Ordinal), Is.True);
-            Assert.That("Something".Contains(string.Empty, StringComparison.Ordinal), Is.True);
-            Assert.That(((string)null).Contains("Nothing", StringComparison.Ordinal), Is.False);
-            Assert.That(string.Empty.Contains("Nothing", StringComparison.Ordinal), Is.False);
-            Assert.That("Something".Contains("Nothing", StringComparison.Ordinal), Is.False);
-            Assert.That("Something".Contains("thing", StringComparison.Ordinal), Is.True);
-            Assert.That("Something".Contains("Thing", StringComparison.Ordinal), Is.False);
-            Assert.That("Something".Contains("Thing", StringComparison.OrdinalIgnoreCase), Is.True);
-            Assert.That("Something".Contains("Thing", StringComparison.CurrentCulture), Is.False);
-            Assert.That("Something".Contains("Thing", StringComparison.CurrentCultureIgnoreCase), Is.True);
-            Assert.That("Something".Contains("Thing", StringComparison.Ordinal), Is.False);
-            Assert.That("Something".Contains("Thing", StringComparison.OrdinalIgnoreCase), Is.True);
-        }
-
-        [Test]
-#if NET46
-        [SetCulture("en-US")]
-#endif
-        public void TestFillUpTo()
-        {
+        public void TestFillUpTo() {
             Assert.That(((string)null).FillUpTo(8), Is.Empty);
             Assert.That(string.Empty.FillUpTo(8), Is.Empty);
             Assert.That("Something".FillUpTo(0), Is.Empty);
@@ -160,8 +125,7 @@ namespace Commons.Text.Tests
         }
 
         [Test]
-        public void TestForEachLine()
-        {
+        public void TestForEachLine() {
             CountEachLineIn(null, 0);
             CountEachLineIn(string.Empty, 0);
             CountEachLineIn("oneline", 1);
@@ -173,8 +137,7 @@ SecondLine", 2);
         }
 
         [Test]
-        public void TestIsEmpty()
-        {
+        public void TestIsEmpty() {
             Assert.That(((string)null).IsEmpty(), Is.True);
             Assert.That(string.Empty.IsEmpty(), Is.True);
             Assert.That("  ".IsEmpty(), Is.False);
@@ -182,8 +145,7 @@ SecondLine", 2);
         }
 
         [Test]
-        public void TestIsNotEmpty()
-        {
+        public void TestIsNotEmpty() {
             Assert.That(((string)null).IsNotEmpty(), Is.False);
             Assert.That(string.Empty.IsNotEmpty(), Is.False);
             Assert.That("  ".IsNotEmpty(), Is.True);
@@ -191,8 +153,7 @@ SecondLine", 2);
         }
 
         [Test]
-        public void TestIsNotJustWhiteSpace()
-        {
+        public void TestIsNotJustWhiteSpace() {
             Assert.That(((string)null).IsNotJustWhiteSpace(), Is.False);
             Assert.That(string.Empty.IsNotJustWhiteSpace(), Is.False);
             Assert.That("  ".IsNotJustWhiteSpace(), Is.False);
@@ -201,8 +162,7 @@ SecondLine", 2);
         }
 
         [Test]
-        public void TestIsOnlyWhiteSpace()
-        {
+        public void TestIsOnlyWhiteSpace() {
             Assert.That(((string)null).IsOnlyWhiteSpace(), Is.True);
             Assert.That(string.Empty.IsOnlyWhiteSpace(), Is.True);
             Assert.That("  ".IsOnlyWhiteSpace(), Is.True);
@@ -210,8 +170,7 @@ SecondLine", 2);
         }
 
         [Test]
-        public void TestNormalizeWhitespaceToSingleSpaces()
-        {
+        public void TestNormalizeWhitespaceToSingleSpaces() {
             Assert.That(((string)null).NormalizeWhitespaceToSingleSpaces(), Is.Empty);
             Assert.That(string.Empty.NormalizeWhitespaceToSingleSpaces(), Is.Empty);
             Assert.That("  ".NormalizeWhitespaceToSingleSpaces(), Is.EqualTo(" "));
@@ -224,8 +183,7 @@ SecondLine", 2);
         }
 
         [Test]
-        public void TestPrefixWith()
-        {
+        public void TestPrefixWith() {
             const string prefix = "Prefix_";
             Assert.That(((string)null).PrefixWith(prefix), Is.EqualTo(prefix));
             Assert.That(string.Empty.PrefixWith(prefix), Is.EqualTo(prefix));
@@ -235,8 +193,7 @@ SecondLine", 2);
         }
 
         [Test]
-        public void TestRepeat()
-        {
+        public void TestRepeat() {
             Assert.That(((string)null).Repeat(3), Is.Empty);
             Assert.That(string.Empty.Repeat(3), Is.Empty);
             Assert.That("  ".Repeat(3), Is.EqualTo("      "));
@@ -248,8 +205,7 @@ SecondLine", 2);
         }
 
         [Test]
-        public void TestSafeSplit()
-        {
+        public void TestSafeSplit() {
             Assert.That(((string)null).SafeSplit(';'), Is.Empty);
             Assert.That(("").SafeSplit(';'), Is.Empty);
             Assert.That(("    ").SafeSplit(';'), Is.Empty);
@@ -260,8 +216,7 @@ SecondLine", 2);
         }
 
         [Test]
-        public void TestSafeSplitTrimmed()
-        {
+        public void TestSafeSplitTrimmed() {
             Assert.That(((string)null).SafeSplitTrimmed(';'), Is.Empty);
             Assert.That(("").SafeSplitTrimmed(';'), Is.Empty);
             Assert.That(("    ").SafeSplitTrimmed(';'), Is.Empty);
@@ -277,8 +232,7 @@ SecondLine", 2);
         }
 
         [Test]
-        public void TestSplitAt()
-        {
+        public void TestSplitAt() {
             Assert.Throws<ArgumentOutOfRangeException>(() => "".SplitAt(0));
             Assert.Throws<ArgumentOutOfRangeException>(() => "".SplitAt(-1));
             Assert.Throws<ArgumentOutOfRangeException>(() => "".SplitAt(int.MinValue));
@@ -291,8 +245,7 @@ SecondLine", 2);
         }
 
         [Test]
-        public void TestStripWhitespace()
-        {
+        public void TestStripWhitespace() {
             Assert.That(((string)null).StripWhitespace(), Is.Empty);
             Assert.That(string.Empty.StripWhitespace(), Is.Empty);
             Assert.That("  ".StripWhitespace(), Is.Empty);
@@ -305,8 +258,7 @@ SecondLine", 2);
         }
 
         [Test]
-        public void TestToCamelCase()
-        {
+        public void TestToCamelCase() {
             Assert.That("singleword".ToCamelCase(), Is.EqualTo("singleword"));
             Assert.That("two words".ToCamelCase(), Is.EqualTo("twoWords"));
             Assert.That("two  spaces  between  words".ToCamelCase(), Is.EqualTo("twoSpacesBetweenWords"));
@@ -316,8 +268,7 @@ SecondLine", 2);
         }
 
         [Test]
-        public void TestToPascalCase()
-        {
+        public void TestToPascalCase() {
             Assert.That("singleword".ToPascalCase(), Is.EqualTo("Singleword"));
             Assert.That("two words".ToPascalCase(), Is.EqualTo("TwoWords"));
             Assert.That("two  spaces  between  words".ToPascalCase(), Is.EqualTo("TwoSpacesBetweenWords"));
@@ -327,8 +278,7 @@ SecondLine", 2);
         }
 
         [Test]
-        public void TestTransform()
-        {
+        public void TestTransform() {
             Assert.That(((string)null).Transform(s => "a" + s + "b"), Is.Empty);
             Assert.That(string.Empty.Transform(s => "a" + s + "b"), Is.Empty);
             Assert.That((" ").Transform(s => "a" + s + "b"), Is.EqualTo("a b"));
@@ -336,8 +286,7 @@ SecondLine", 2);
         }
 
         [Test]
-        public void TestTransformDefaulting()
-        {
+        public void TestTransformDefaulting() {
             Assert.That(((string)null).TransformDefaulting(s => "a" + s + "b"), Is.Null);
             Assert.That(string.Empty.TransformDefaulting(s => "a" + s + "b"), Is.Null);
             Assert.That((" ").TransformDefaulting(s => "a" + s + "b"), Is.EqualTo("a b"));
@@ -345,8 +294,7 @@ SecondLine", 2);
         }
 
         [Test]
-        public void TestTruncate()
-        {
+        public void TestTruncate() {
             Assert.That(((string)null).Truncate(5), Is.Null);
             Assert.That(string.Empty.Truncate(5), Is.Empty);
             Assert.That(("123").Truncate(5), Is.EqualTo("123"));
@@ -355,8 +303,7 @@ SecondLine", 2);
         }
 
         [Test]
-        public void TestTryParseOrDefault()
-        {
+        public void TestTryParseOrDefault() {
             Assert.That(((string)null).TryParseOrDefault(5), Is.EqualTo(5));
             Assert.That(string.Empty.TryParseOrDefault(5), Is.EqualTo(5));
             Assert.That("A".TryParseOrDefault(5), Is.EqualTo(5));
@@ -366,8 +313,7 @@ SecondLine", 2);
         }
 
         [Test]
-        public void TestWithDefault()
-        {
+        public void TestWithDefault() {
             Assert.That(((string)null).WithDefault("default"), Is.EqualTo("default"));
             Assert.That(string.Empty.WithDefault("default"), Is.EqualTo("default"));
             Assert.That("  ".WithDefault("default"), Is.EqualTo("default"));
@@ -375,26 +321,24 @@ SecondLine", 2);
         }
 
         [Test]
-        public void TestWithDefaultSingle()
-        {
+        public void TestWithDefaultSingle() {
             Assert.That(((string)null).WithDefault(), Is.Empty);
             Assert.That(string.Empty.WithDefault(), Is.Empty);
             Assert.That("  ".WithDefault(), Is.Empty);
             Assert.That("A".WithDefault(), Is.EqualTo("A"));
         }
 
-        enum OtherTestEnum
+        private enum OtherTestEnum
         {
             FirstValue, LastValue
         }
 
-        enum TestEnum
+        private enum TestEnum
         {
             FirstValue, SecondValue, ThirdValue, LastValue
         }
 
-        static void CountEachLineIn(string text, int expected)
-        {
+        private static void CountEachLineIn(string text, int expected) {
             var count = 0;
             text.ForEachLine(line => count++);
             Assert.That(count, Is.EqualTo(expected));

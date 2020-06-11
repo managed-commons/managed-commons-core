@@ -21,24 +21,9 @@
 // SOFTWARE.
 
 using System;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using Commons;
 
-[assembly: AssemblyCompany("Rafael 'Monoman' Teixeira, Managed Commons Team")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCopyright("Copyright ©2002-2015 Rafael 'Monoman' Teixeira, Managed Commons Team")]
-[assembly: AssemblyCulture("")]
-[assembly: AssemblyDescription("Core meta-information library")]
-[assembly: AssemblyProduct("Managed.Commons.Core")]
-[assembly: AssemblyTitle("Commons.Core")]
-[assembly: AssemblyTrademark("")]
 [assembly: CLSCompliant(false)]
-[assembly: ComVisible(false)]
-[assembly: AssemblyVersion("2.0.0")]
-[assembly: AssemblyFileVersion("2.0.0")]
-[assembly: AssemblyInformationalVersion("2.0.0-Beta2")]
-[assembly: License(LicenseType.MIT)]
 [assembly: About("The basics")]
 [assembly: IsPartOfPackage("Managed Commons")]
 [assembly: ReportBugsTo("https://github.com/managed-commons/managed-commons-core/issues")]

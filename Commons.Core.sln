@@ -1,25 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commons.Core", "Commons.Core_Net46\Commons.Core.csproj", "{9FD82B7E-A718-4266-BCEF-2F987E374BBB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commons.Core", "Commons.Core\Commons.Core.csproj", "{49AD585D-7759-425D-8BF9-55169B61FD26}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configurations", "Configurations", "{4CCF9BBD-4014-4C42-BB22-A95121199869}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnit.Commons.Core", "NUnit.Commons.Core\NUnit.Commons.Core.csproj", "{DDDA8349-4B48-4D40-BBC4-9404CECB4A50}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3A4E93C4-8F86-4035-BC24-9EF8EEF2D158}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
-		.gitattributes = .gitattributes
-		.gitignore = .gitignore
-		.testsettings = .testsettings
-		.travis.yml = .travis.yml
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unit.Commons.Core", "Commons.Core.Tests_Net46\Unit.Commons.Core.csproj", "{78D0CDDC-2098-4058-8D82-6E4337A51ED0}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{641C2D8F-6D80-4221-A8CF-F712D491E3DB}"
-	ProjectSection(SolutionItems) = preProject
-		LICENSE = LICENSE
-		README.md = README.md
 	EndProjectSection
 EndProject
 Global
@@ -28,16 +18,19 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9FD82B7E-A718-4266-BCEF-2F987E374BBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9FD82B7E-A718-4266-BCEF-2F987E374BBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9FD82B7E-A718-4266-BCEF-2F987E374BBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9FD82B7E-A718-4266-BCEF-2F987E374BBB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{78D0CDDC-2098-4058-8D82-6E4337A51ED0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{78D0CDDC-2098-4058-8D82-6E4337A51ED0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{78D0CDDC-2098-4058-8D82-6E4337A51ED0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{78D0CDDC-2098-4058-8D82-6E4337A51ED0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49AD585D-7759-425D-8BF9-55169B61FD26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49AD585D-7759-425D-8BF9-55169B61FD26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49AD585D-7759-425D-8BF9-55169B61FD26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49AD585D-7759-425D-8BF9-55169B61FD26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDDA8349-4B48-4D40-BBC4-9404CECB4A50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDDA8349-4B48-4D40-BBC4-9404CECB4A50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDDA8349-4B48-4D40-BBC4-9404CECB4A50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDDA8349-4B48-4D40-BBC4-9404CECB4A50}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {73A02BD0-05A0-4E0C-8184-C5334D0E1B1B}
 	EndGlobalSection
 EndGlobal

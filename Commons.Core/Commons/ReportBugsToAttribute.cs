@@ -27,10 +27,7 @@ namespace Commons
     [AttributeUsage(AttributeTargets.Assembly)]
     public sealed class ReportBugsToAttribute : Attribute
     {
-        public ReportBugsToAttribute(string url)
-        {
-            Url = url;
-        }
+        public ReportBugsToAttribute(string url) => Url = url;
 
         public string Url { get; }
 

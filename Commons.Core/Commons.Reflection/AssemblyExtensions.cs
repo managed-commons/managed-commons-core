@@ -1,4 +1,4 @@
-﻿// Commons.Core
+// Commons.Core
 //
 // Copyright (c) 2002-2015 Rafael 'Monoman' Teixeira, Managed Commons Team
 //
@@ -36,20 +36,15 @@ namespace Commons.Reflection
 
         public static IEnumerable<Attribute> GetAttributes<T>(this Assembly assembly) where T : Attribute => assembly?.GetCustomAttributes(typeof(T));
 
-        public static TReturn GetAttributeValue<T, TReturn>(this Assembly assembly, Func<T, TReturn> getter) where T : Attribute
-        {
+        public static TReturn GetAttributeValue<T, TReturn>(this Assembly assembly, Func<T, TReturn> getter) where T : Attribute {
             var result = assembly.GetAttribute<T>();
-            /// Bug on Code-Cracker https://github.com/code-cracker/code-cracker/issues/397
-#pragma warning disable CC0031 // Use Invoke Method To Fire Event Analyzer
-            return (result != null) ? getter(result) : default(TReturn);
-#pragma warning restore CC0031 // Use Invoke Method To Fire Event Analyzer
+            return (result != null) ? getter(result) : default;
         }
 
         public static string GetAttributeValueAsString<T>(this Assembly assembly, Func<T, string> getter) where T : Attribute =>
             assembly.GetAttributeValue<T, string>(getter);
 
-        public static string GetVersion(this Assembly assembly, int size = 3)
-        {
+        public static string GetVersion(this Assembly assembly, int size = 3) {
             if (assembly == null)
                 return string.Empty;
             var version = assembly.GetAttributeValueAsString<AssemblyInformationalVersionAttribute>(a => a.InformationalVersion);

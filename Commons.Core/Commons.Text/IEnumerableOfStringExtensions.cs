@@ -1,4 +1,4 @@
-﻿// Commons.Core
+// Commons.Core
 //
 // Copyright (c) 2002-2015 Rafael 'Monoman' Teixeira, Managed Commons Team
 //
@@ -39,5 +39,16 @@ namespace Commons.Text
         public static IEnumerable<string> ToUpper(this IEnumerable<string> list) => list.Select(s => s == null ? string.Empty : s.ToUpperInvariant());
 
         public static IEnumerable<string> TrimAll(this IEnumerable<string> list) => list.Select(s => s == null ? string.Empty : s.Trim());
+    }
+
+    public static class IEnumerableOfTExtensions
+    {
+        public static IEnumerable<T> NoNulls<T>(this IEnumerable<T> list) => list.Safe().Where(it => !(it is null));
+
+        public static IEnumerable<T> Safe<T>(this IEnumerable<T> list) => list is null ? Enumerable.Empty<T>() : list;
+
+        public static bool None<T>(this IEnumerable<T> list) => !list.NoNulls().Any();
+        public static IEnumerable<TS> SelectIfAny<T, TS>(this IEnumerable<T> list, Func<T, TS> selector)
+            => list.None() ? null : list.Select(selector);
     }
 }

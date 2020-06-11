@@ -1,4 +1,4 @@
-﻿// Commons.Core
+// Commons.Core
 //
 // Copyright (c) 2002-2015 Rafael 'Monoman' Teixeira, Managed Commons Team
 //
@@ -27,14 +27,14 @@ using System.Reflection;
 using System.Text;
 using Commons.Reflection;
 using Commons.Text;
+using Commons.Translation;
 using static Commons.Translation.TranslationService;
 
 namespace Commons
 {
     public class AssemblyInformation
     {
-        public AssemblyInformation(Assembly assembly)
-        {
+        public AssemblyInformation(Assembly assembly) {
             ExeName = assembly.GetName().Name;
             Version = assembly.GetVersion();
             Title = assembly.GetAttributeValueAsString<AssemblyTitleAttribute>(a => a.Title);
@@ -45,12 +45,14 @@ namespace Commons
             ReportBugsTo = assembly.AttributeToString<ReportBugsToAttribute>();
             License = assembly.GetAttribute<LicenseAttribute>();
             Authors = GetAuthors(assembly);
+            Company = assembly.GetAttributeValueAsString<AssemblyCompanyAttribute>(a => a.Company);
         }
 
         public string AboutDetails { get; set; }
         public string AdditionalBannerInfo { get; set; }
         public string AdditionalInfo { get; set; }
         public IEnumerable<string> Authors { get; set; }
+        public string Company { get; set; }
         public string Copyright { get; set; }
         public string Description { get; set; }
         public string ExeName { get; set; }
@@ -64,95 +66,70 @@ namespace Commons
 
         public string Version { get; set; }
 
-        public AssemblyInformation WithDefaults
-        {
-            get
-            {
-                AboutDetails = AboutDetails ?? "Add a [assembly: Commons.About(\"Here goes the short about details\")] to your assembly";
-                Copyright = Copyright ?? $"Add a [assembly: AssemblyCopyright(\"(c){DateTimeOffset.Now.Year:0000} Here goes the copyright holder name\")] to your assembly";
-                Description = Description ?? "Add a [assembly: AssemblyDescription(\"Here goes the short description\")] to your assembly";
-                Title = Title ?? "Add a [assembly: AssemblyTitle(\"Here goes the application name\")] to your assembly";
-                Product = Product ?? "Add a [assembly: AssemblyProduct(\"Here goes the product/parent project name\")] to your assembly";
-                if (Authors == null) {
-                    var authors = new String[1];
-                    authors[0] = "Add [assembly: AssemblyCompany(\"Here goes the authors' names, separated by commas\")] to your assembly";
-                    Authors = authors;
-                }
+        public AssemblyInformation WithDefaults {
+            get {
+                AboutDetails ??= "Add [assembly: Commons.About(\"Here goes the short about details\")] to your code";
+                Copyright ??= $"Add [assembly: AssemblyCopyright(\"(c){DateTimeOffset.Now.Year:0000} Here goes the copyright holder name\")] to your code";
+                Description ??= "Add [assembly: AssemblyDescription(\"Here goes the short description\")] to your code";
+                Title ??= "Add [assembly: AssemblyTitle(\"Here goes the application name\")] to your code";
+                Product ??= "Add [assembly: AssemblyProduct(\"Here goes the product/parent project name\")] to your code";
+                Company ??= "Add [assembly: AssemblyCompany(\"Here goes the company name\")] to your code";
+                Authors ??= (new string[] { "Add as many [assembly: Commons.Author(\"Here goes the author name\")] as authors to your code" });
                 return this;
             }
         }
 
-        public void ShowAbout()
-        {
-            ShowStringBuiltWith(AppendBanner, AppendDescription, AppendAuthors);
-        }
+        public void ShowAbout([Translatable] string companyLabelOverride = null)
+            => ShowStringBuiltWith(AppendBanner, AppendDescription, sb => AppendAuthors(sb, companyLabelOverride));
 
-        public void ShowBanner()
-        {
-            ShowStringBuiltWith(AppendBanner);
-        }
+        public void ShowBanner() => ShowStringBuiltWith(AppendBanner);
 
-        public void ShowFooter()
-        {
-            ShowStringBuiltWith(AppendFooter);
-        }
+        public void ShowFooter() => ShowStringBuiltWith(AppendFooter);
 
-        public void ShowTitleLines()
-        {
-            ShowStringBuiltWith(AppendBanner, AppendDescription);
-        }
+        public void ShowTitleLines() => ShowStringBuiltWith(AppendBanner, AppendDescription);
 
-        public override string ToString() => BuildStringWith(AppendBanner, AppendDescription, AppendAuthors, AppendFooter);
+        public override string ToString() => BuildToString(sb => AppendAuthors(sb));
 
-        static string BuildStringWith(params Action<StringBuilder>[] appenders)
-        {
+        public string ToString([Translatable] string companyLabelOverride) => BuildToString(sb => AppendAuthors(sb, companyLabelOverride));
+
+        private static readonly string _nl = Environment.NewLine;
+
+        private static string BuildStringWith(params Action<StringBuilder>[] appenders) {
             var sb = new StringBuilder();
             foreach (var builder in appenders)
                 builder(sb);
             return sb.ToString();
         }
 
-        static string ChooseConnector(string line) => (line?.IndexOf('@') > 0) ? _("to") : _("at");
+        private static string ChooseConnector(string line) => (line?.IndexOf('@') > 0) ? _("to") : _("at");
 
-        static IEnumerable<string> GetAuthors(Assembly assembly)
-        {
-            var company = assembly.GetAttributeValueAsString<AssemblyCompanyAttribute>(a => a.Company);
-            if (!string.IsNullOrWhiteSpace(company))
-                return company.Split(',').Select(s => s.Trim());
-            return null;
-        }
+        private static IEnumerable<string> GetAuthors(Assembly assembly)
+            => assembly.GetAttributes<AuthorAttribute>().Cast<AuthorAttribute>().SelectIfAny(a => a.Name);
 
-        static void ShowStringBuiltWith(params Action<StringBuilder>[] appenders)
-        {
-            Console.Write(BuildStringWith(appenders));
-        }
+        private static void ShowStringBuiltWith(params Action<StringBuilder>[] appenders) => Console.Write(BuildStringWith(appenders));
 
-        void AppendAuthors(StringBuilder sb)
-        {
+        private void AppendAuthors(StringBuilder sb, string companyLabelOverride = null) {
             sb.AppendLine(_(AboutDetails));
             sb.AppendLine(__($"Authors: {string.Join(", ", Authors)}"));
+            sb.AppendLineIfNotNull(Company, $"{companyLabelOverride ?? _("Company")}: {Company}");
         }
 
-        void AppendBanner(StringBuilder sb)
-        {
+        private void AppendBanner(StringBuilder sb) {
             sb.AppendLine($"{Title}  {Version} - {Copyright}");
             sb.AppendLineIfNotEmpty(AdditionalBannerInfo);
         }
 
-        void AppendDescription(StringBuilder sb)
-        {
+        private void AppendDescription(StringBuilder sb) {
             sb.AppendLine(_(Description));
-            sb.AppendLineIfNotNull(License, __($@"
-License: {License}"));
+            sb.AppendLineIfNotNull(License, __($"{_nl}License: {License}"));
             sb.AppendLine();
         }
 
-        void AppendFooter(StringBuilder sb)
-        {
-            sb.AppendLineIfNotNull(AdditionalInfo, $@"
-{_(AdditionalInfo)}");
-            sb.AppendLineIfNotNull(ReportBugsTo, __($@"
-Please report bugs {ChooseConnector(ReportBugsTo)} <{_(ReportBugsTo)}>"));
+        private void AppendFooter(StringBuilder sb) {
+            sb.AppendLineIfNotNull(AdditionalInfo, $"{_nl}{_(AdditionalInfo)}");
+            sb.AppendLineIfNotNull(ReportBugsTo, __($"{_nl}Please report bugs {ChooseConnector(ReportBugsTo)} <{_(ReportBugsTo)}>"));
         }
+
+        private string BuildToString(Action<StringBuilder> AuthorsAppender) => BuildStringWith(AppendBanner, AppendDescription, AuthorsAppender, AppendFooter);
     }
 }

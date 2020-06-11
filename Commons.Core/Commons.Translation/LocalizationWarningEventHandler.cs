@@ -1,4 +1,4 @@
-﻿// Commons.Core
+// Commons.Core
 //
 // Copyright (c) 2002-2015 Rafael 'Monoman' Teixeira, Managed Commons Team
 //
@@ -26,10 +26,9 @@ namespace Commons.Translation
 {
     public delegate void LocalizationWarningEventHandler(object sender, LocalizationWarningEventArgs e);
 
-    public class LocalizationWarningEventArgs: EventArgs
+    public class LocalizationWarningEventArgs : EventArgs
     {
-        public LocalizationWarningEventArgs(string languageName, string context, string missingText)
-        {
+        public LocalizationWarningEventArgs(string languageName, string context, string missingText) {
             LanguageName = languageName;
             Context = context;
             MissingText = missingText;

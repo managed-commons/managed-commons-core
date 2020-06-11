@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <LOCAL_NUGETS_FOLDER Condition="'$(LOCAL_NUGETS_FOLDER)' == ''">$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)\..\..\nugets'))</LOCAL_NUGETS_FOLDER>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <Authors>Rafael Teixeira</Authors>
+        <Company>Managed Commons Team</Company>
+        <Product>Managed.Commons.Core</Product>
+        <Description>Managed Commons core library for assembly metadata and translation services</Description>
+        <Copyright>Copyright (c) 2005-2020 Rafael 'Monoman' Teixeira, Managed Commons Team</Copyright>
+        <PackageProjectUrl>https://github.com/monoman/managed-commons-locale-helpers-pt_BR</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/monoman/managed-commons-locale-helpers-pt_BR.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageReleaseNotes>Upgrade to .NET Standard 2.0</PackageReleaseNotes>
+        <LangVersion>8</LangVersion>
+        <Version>2.0.0</Version>
+        <PackageTags>translation metadata</PackageTags>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <OutputType>Library</OutputType>
+        <RootNamespace>Commons.Core</RootNamespace>
+        <AssemblyName>Commons.Core</AssemblyName>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    </PropertyGroup>
+    <ItemGroup>
+        <None Include="..\LICENSE">
+            <Pack>True</Pack>
+            <PackagePath></PackagePath>
+        </None>
+        <None Include="..\README.md">
+            <Pack>True</Pack>
+            <PackagePath></PackagePath>
+        </None>
+    </ItemGroup>
+    <Target Name="PublishLocally" AfterTargets="Pack">
+        <ItemGroup>
+            <NugetPackages Include="$(PackageOutputAbsolutePath)\*$(Version).nupkg" Condition="Exists('$(LOCAL_NUGETS_FOLDER)')"/>
+        </ItemGroup>
+        <Message Importance="high" Text="Publish to Local Nugets Folder '$(LOCAL_NUGETS_FOLDER)'" />
+        <Copy DestinationFolder="$(LOCAL_NUGETS_FOLDER)" SourceFiles="@(NugetPackages)" ContinueOnError="true" SkipUnchangedFiles="false" >
+            <Output TaskParameter="CopiedFiles" PropertyName="CopiedNugets"/>
+        </Copy>
+        <Message Importance="high" Text="Copied '$(CopiedNugets)'" Condition="Exists('$(CopiedNugets)')"/>
+    </Target>
+</Project>

@@ -1,4 +1,4 @@
-﻿// Commons.Core
+// Commons.Core
 //
 // Copyright (c) 2002-2015 Rafael 'Monoman' Teixeira, Managed Commons Team
 //
@@ -28,10 +28,7 @@ namespace Commons.Translation
 {
     public class DictionaryTranslator : ITranslator
     {
-        public void AddLocale(string locale, Dictionary<string, string> dictionary)
-        {
-            _AddLocale(locale, dictionary);
-        }
+        public void AddLocale(string locale, Dictionary<string, string> dictionary) => _AddLocale(locale, dictionary);
 
         public string Translate(string locale, string textToTranslate) => _Translate(locale, textToTranslate);
 
@@ -44,14 +41,12 @@ namespace Commons.Translation
 
         private static string ValidateAndNormalizeLocale(string locale) => string.IsNullOrWhiteSpace(locale) ? throw new ArgumentNullException(nameof(locale)) : locale.ToLower();
 
-        private void _AddLocale(string locale, Dictionary<string, string> dictionary)
-        {
+        private void _AddLocale(string locale, Dictionary<string, string> dictionary) {
             locale = ValidateAndNormalizeLocale(locale);
             if (_.ContainsKey(locale))
                 throw new ArgumentException("Locale already added!!!", nameof(locale));
             _[locale] = dictionary;
-            if (locale.Contains("-"))
-            {
+            if (locale.Contains("-")) {
                 locale = LanguageFrom(locale);
                 if (!_.ContainsKey(locale))
                     _[locale] = dictionary;
@@ -60,18 +55,14 @@ namespace Commons.Translation
 
         private string[] _Translate(string locale, string[] plurals) => plurals.Select(s => _Translate(locale, s)).ToArray();
 
-        private string _Translate(string locale, string textToTranslate)
-        {
+        private string _Translate(string locale, string textToTranslate) {
             locale = ValidateAndNormalizeLocale(locale);
-            if (_.ContainsKey(locale))
-            {
+            if (_.ContainsKey(locale)) {
                 var dic = _[locale];
                 if (dic.ContainsKey(textToTranslate))
                     return dic[textToTranslate];
             }
-            if (locale.Contains("-"))
-                return _Translate(LanguageFrom(locale), textToTranslate);
-            return null;
+            return locale.Contains("-") ? _Translate(LanguageFrom(locale), textToTranslate) : null;
         }
     }
 }

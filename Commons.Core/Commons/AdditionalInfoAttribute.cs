@@ -29,10 +29,7 @@ namespace Commons
     [AttributeUsage(AttributeTargets.Assembly)]
     public sealed class AdditionalInfoAttribute : Attribute
     {
-        public AdditionalInfoAttribute([Translatable]string info)
-        {
-            Info = info;
-        }
+        public AdditionalInfoAttribute([Translatable] string info) => Info = info;
 
         public string Info { get; }
 

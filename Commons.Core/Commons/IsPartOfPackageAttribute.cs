@@ -27,10 +27,7 @@ namespace Commons
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
     public sealed class IsPartOfPackageAttribute : Attribute
     {
-        public IsPartOfPackageAttribute(string packageName)
-        {
-            PackageName = packageName;
-        }
+        public IsPartOfPackageAttribute(string packageName) => PackageName = packageName;
 
         public string PackageName { get; }
 

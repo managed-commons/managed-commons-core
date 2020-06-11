@@ -1,4 +1,4 @@
-﻿// Commons.Core
+// Commons.Core
 //
 // Copyright (c) 2002-2015 Rafael 'Monoman' Teixeira, Managed Commons Team
 //
@@ -29,35 +29,30 @@ namespace Commons.Text
 {
     public static class StringBuilderExtensions
     {
-        public static StringBuilder AppendLineIfNotEmpty(this StringBuilder sb, string value)
-        {
+        public static StringBuilder AppendLineIfNotEmpty(this StringBuilder sb, string value) {
             if (sb != null && !string.IsNullOrWhiteSpace(value))
                 sb.AppendLine(value);
             return sb;
         }
 
-        public static StringBuilder AppendLineIfNotNull(this StringBuilder sb, object item, string text = null)
-        {
+        public static StringBuilder AppendLineIfNotNull(this StringBuilder sb, object item, string text = null) {
             if (item != null)
                 sb.AppendLineIfNotEmpty(text ?? item.ToString());
             return sb;
         }
 
-        public static StringBuilder AppendLinesWithIndentAndSeparator(this StringBuilder sb, IEnumerable<string> items, string indent, char separator = ',')
-        {
+        public static StringBuilder AppendLinesWithIndentAndSeparator(this StringBuilder sb, IEnumerable<string> items, string indent, char separator = ',') {
             foreach (var text in items)
                 sb.AppendLine($"{indent}{text}{separator}");
             return sb;
         }
 
-        public static string ToString(this StringBuilder sb, Action<StringBuilder> magic)
-        {
+        public static string ToString(this StringBuilder sb, Action<StringBuilder> magic) {
             magic(sb);
             return sb.ToString();
         }
 
-        public static StringBuilder TrimLastSeparatorPreservingWhitespace(this StringBuilder sb, char separator = ',')
-        {
+        public static StringBuilder TrimLastSeparatorPreservingWhitespace(this StringBuilder sb, char separator = ',') {
             for (int j = sb.Length - 1; j > 0; j--) {
                 var c = sb[j];
                 if (!char.IsWhiteSpace(c)) {
@@ -69,15 +64,13 @@ namespace Commons.Text
             return sb;
         }
 
-        public static StringBuilder TruncateAt(this StringBuilder sb, int width)
-        {
+        public static StringBuilder TruncateAt(this StringBuilder sb, int width) {
             if (sb.Length > width)
                 sb.Remove(width, sb.Length - width);
             return sb;
         }
 
-        internal static void FromSpacedWordsToCapitalizedWords(this StringBuilder sb, string text, bool capitalizeNextChar)
-        {
+        internal static void FromSpacedWordsToCapitalizedWords(this StringBuilder sb, string text, bool capitalizeNextChar) {
             foreach (char c in text) {
                 if (char.IsWhiteSpace(c) && sb.Length > 0)
                     capitalizeNextChar = true;

@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+    <Authors>Rafael 'Monoman' Teixeira, Managed Commons Team</Authors>
+    <Copyright>Copyright ©2002-2020 Rafael 'Monoman' Teixeira, Managed Commons Team</Copyright>
+    <Product>Commons.Core</Product>
+    <Description>Unit tests to core meta-information library</Description>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/managed-commons/managed-commons-core.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/managed-commons/managed-commons-core</PackageProjectUrl>
+    <Company>Managed Commons</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="nunit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Commons.Core\Commons.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

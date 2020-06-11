@@ -1,4 +1,4 @@
-﻿// Commons.Core
+// Commons.Core
 //
 // Copyright (c) 2002-2015 Rafael 'Monoman' Teixeira, Managed Commons Team
 //
@@ -26,7 +26,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Reflection;
 
 namespace Commons.Text
 {
@@ -34,37 +33,27 @@ namespace Commons.Text
     {
         public static bool AsBool(this string s) => TryParseOrDefault(s, false);
 
-        public static byte[] AsBytes(this string s) => s.TransformDefaulting(Convert.FromBase64String) ?? NoBytes;
+        public static byte[] AsBytes(this string s) => s.TransformDefaulting(Convert.FromBase64String) ?? _noBytes;
 
         public static T AsEnum<T>(this string s, T defaultValue) where T : struct, IConvertible => TryParseOrDefault(s, defaultValue);
 
         public static int AsInt(this string s) => TryParseOrDefault(s, (int)0);
 
-        public static IEnumerable<string> AsLines(this string text)
-        {
+        public static IEnumerable<string> AsLines(this string text) {
             if (text == null)
                 yield break;
-            using (TextReader reader = new StringReader(text))
-                foreach (string line in reader.Lines())
-                    yield return line;
+            using TextReader reader = new StringReader(text);
+            foreach (string line in reader.Lines())
+                yield return line;
         }
 
         public static long AsLong(this string s) => TryParseOrDefault(s, (long)0);
 
-        public static byte[] AsUtf8Bytes(this string s) => s.TransformDefaulting(Encoding.UTF8.GetBytes) ?? NoBytes;
+        public static byte[] AsUtf8Bytes(this string s) => s.TransformDefaulting(Encoding.UTF8.GetBytes) ?? _noBytes;
 
-        public static string AtMost(this string s, int length)
-        {
-            if (s != null && length > 0 && s.Length > length)
-                return s.Substring(0, length);
-            return s;
-        }
+        public static string AtMost(this string s, int length) => s != null && length > 0 && s.Length > length ? s.Substring(0, length) : s;
 
-        public static bool Contains(this string s, string part, StringComparison comparison) =>
-            part.IsEmpty() || (s.IsNotEmpty() && s.IndexOf(part, comparison) >= 0);
-
-        public static string FillUpTo(this string s, int width)
-        {
+        public static string FillUpTo(this string s, int width) {
             if (s.IsEmpty() || width <= 0)
                 return string.Empty;
             var sb = new StringBuilder(width + s.Length);
@@ -72,8 +61,7 @@ namespace Commons.Text
             return sb.TruncateAt(width).ToString();
         }
 
-        public static void ForEachLine(this string text, Action<string> process)
-        {
+        public static void ForEachLine(this string text, Action<string> process) {
             if (text.IsNotEmpty())
                 new StringReader(text).ForEachLine(process);
         }
@@ -90,8 +78,7 @@ namespace Commons.Text
 
         public static string PrefixWith(this string s, string prefix) => prefix + s.WithDefault().Trim();
 
-        public static string Repeat(this string s, int repetitions)
-        {
+        public static string Repeat(this string s, int repetitions) {
             if (s.IsEmpty() || repetitions <= 0)
                 return string.Empty;
             var sb = new StringBuilder(s.Length * repetitions);
@@ -99,8 +86,7 @@ namespace Commons.Text
             return sb.ToString();
         }
 
-        public static IEnumerable<string> SafeSplit(this string list, params char[] separators)
-        {
+        public static IEnumerable<string> SafeSplit(this string list, params char[] separators) {
             if (list.IsOnlyWhiteSpace())
                 yield break;
             if (separators.Length == 0) {
@@ -113,8 +99,7 @@ namespace Commons.Text
 
         public static IEnumerable<string> SafeSplitTrimmed(this string list, params char[] separators) => SafeSplit(list, separators).TrimAll().NoBlanks();
 
-        public static IEnumerable<string> SplitAt(this string s, int length)
-        {
+        public static IEnumerable<string> SplitAt(this string s, int length) {
             if (length < 1)
                 throw new ArgumentOutOfRangeException(nameof(length));
             var list = new List<string>();
@@ -137,11 +122,14 @@ namespace Commons.Text
 
         public static string Transform(this string s, Func<string, string> transform) => s.IsEmpty() ? string.Empty : transform(s);
 
-        public static T TransformDefaulting<T>(this string s, Func<string, T> transform) => s.IsEmpty() ? default(T) : transform(s);
+        public static T TransformDefaulting<T>(this string s, Func<string, T> transform) => s.IsEmpty() ? default : transform(s);
 
         public static string Truncate(this string s, int size) => SafeTruncate(s?.Trim(), size);
 
         public static T TryParseOrDefault<T>(this string s, T defaultValue) where T : IConvertible => s.IsOnlyWhiteSpace() ? defaultValue : ParseWithDefault<T>(s, defaultValue);
+
+        public static string WithEnvironmentNewLines(this string verbatimString)
+            => Regex.Replace(verbatimString.TrimStart('\r', '\n'), @"(\r\n|\r[^\n])", "\n").Replace("\n", Environment.NewLine);
 
         public static string WithDefault(this string s) => s.WithDefault(string.Empty);
 
@@ -149,43 +137,27 @@ namespace Commons.Text
 
         internal static string TransformOrNot(this string s, Func<string, string> transform) => s.IsEmpty() ? s : (transform(s) ?? s);
 
-        static string FromSpacedWordsToCapitalizedWords(string s, bool pascalCasing) => s.Transform(ss => ss.Rebuild(sb => sb.FromSpacedWordsToCapitalizedWords(ss.Trim(), pascalCasing)));
+        private static readonly byte[] _noBytes = new byte[0];
 
-        static readonly byte[] NoBytes = new byte[0];
+        private static string FromSpacedWordsToCapitalizedWords(string s, bool pascalCasing) => s.Transform(ss => ss.Rebuild(sb => sb.FromSpacedWordsToCapitalizedWords(ss.Trim(), pascalCasing)));
 
-        static T ParseEnumIgnoringCase<T>(string s, T defaultValue)
-          where T : IConvertible
-        {
-            if (!Enum.GetNames(typeof(T)).Any(name => name.Equals(s, StringComparison.OrdinalIgnoreCase)))
-                return defaultValue;
-            return (T)Enum.Parse(typeof(T), s, true);
-        }
+        private static bool IsEnum<T>() where T : IConvertible => typeof(T).IsEnum;
 
-        static T ParseWithDefault<T>(string s, T defaultValue)
-          where T : IConvertible
-        {
+        private static T ParseEnumIgnoringCase<T>(string s, T defaultValue) where T : IConvertible => !Enum.GetNames(typeof(T)).Any(name => name.Equals(s, StringComparison.OrdinalIgnoreCase))
+                ? defaultValue
+                : (T)Enum.Parse(typeof(T), s, true);
+
+        private static T ParseWithDefault<T>(string s, T defaultValue)
+          where T : IConvertible {
             try {
-                if (IsEnum<T>())
-                    return ParseEnumIgnoringCase(s, defaultValue);
-                return (T)(Convert.ChangeType(s, typeof(T)));
+                return IsEnum<T>() ? ParseEnumIgnoringCase(s, defaultValue) : (T)(Convert.ChangeType(s, typeof(T)));
             } catch (Exception) {
                 return defaultValue;
             }
         }
 
-#pragma warning disable CSE0003 // Use expression-bodied members
-        static bool IsEnum<T>() where T : IConvertible
-#pragma warning restore CSE0003 // Use expression-bodied members
-        {
-#if NET46
-            return typeof(T).IsEnum;
-#else
-            return typeof(T).GetTypeInfo().IsEnum;
-#endif
-        }
+        private static string Rebuild(this string s, Action<StringBuilder> magic) => new StringBuilder(s.Length).ToString(magic);
 
-        static string Rebuild(this string s, Action<StringBuilder> magic) => new StringBuilder(s.Length).ToString(magic);
-
-        static string SafeTruncate(string s, int size) => s.IsEmpty() || s.Length <= size ? s : s.Substring(0, size);
+        private static string SafeTruncate(string s, int size) => s.IsEmpty() || s.Length <= size ? s : s.Substring(0, size);
     }
 }

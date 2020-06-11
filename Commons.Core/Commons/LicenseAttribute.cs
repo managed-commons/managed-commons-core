@@ -1,4 +1,4 @@
-﻿// Commons.Core
+// Commons.Core
 //
 // Copyright (c) 2002-2015 Rafael 'Monoman' Teixeira, Managed Commons Team
 //
@@ -49,11 +49,10 @@ namespace Commons
     [AttributeUsage(AttributeTargets.Assembly)]
     public sealed class LicenseAttribute : Attribute
     {
-        public LicenseAttribute(LicenseType licenseType)
-        {
+        public LicenseAttribute(LicenseType licenseType) {
             if (licenseType == LicenseType.Other)
                 throw new ArgumentOutOfRangeException(nameof(licenseType), "The license type should not be 'Other', use the alternate constructor");
-            var license = Licenses[licenseType];
+            var license = _licenses[licenseType];
             LicenseType = licenseType;
             Name = license.Name;
             Details = license.Details;
@@ -61,8 +60,7 @@ namespace Commons
             IsProprietary = licenseType == LicenseType.Proprietary;
         }
 
-        public LicenseAttribute(string name, string detailsUrl, [Translatable] string details, bool isProprietary)
-        {
+        public LicenseAttribute(string name, string detailsUrl, [Translatable] string details, bool isProprietary) {
             LicenseType = isProprietary ? LicenseType.Proprietary : LicenseType.Other;
             Name = name;
             DetailsUrl = detailsUrl;
@@ -84,8 +82,7 @@ namespace Commons
 
         public override string ToString() => string.IsNullOrWhiteSpace(DetailsUrl) ? Name : (Name + " - " + TranslatedDetails);
 
-        static readonly Dictionary<LicenseType, LicenseDescriptor> Licenses = new Dictionary<LicenseType, LicenseDescriptor>
-        {
+        private static readonly Dictionary<LicenseType, LicenseDescriptor> _licenses = new Dictionary<LicenseType, LicenseDescriptor> {
             [LicenseType.Proprietary] = new LicenseDescriptor("Proprietary", null),
             [LicenseType.AGPL3] = new LicenseDescriptor("GNU Affero General Public License, Version 3 (AGPL-3.0)", "https://opensource.org/licenses/AGPL-3.0"),
             [LicenseType.Apache2] = new LicenseDescriptor("Apache License, Version 2.0", "https://opensource.org/licenses/Apache-2.0"),
@@ -101,14 +98,13 @@ namespace Commons
             [LicenseType.Eclipse] = new LicenseDescriptor("Eclipse Public License, Version 1.0 (EPL-1.0)", "https://opensource.org/licenses/EPL-1.0")
         };
 
-        struct LicenseDescriptor
+        private struct LicenseDescriptor
         {
             public readonly string Details;
             public readonly string Name;
             public readonly string Url;
 
-            public LicenseDescriptor(string name, string url, string details = null)
-            {
+            public LicenseDescriptor(string name, string url, string details = null) {
                 Name = name; Url = url; Details = details;
             }
         }

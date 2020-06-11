@@ -1,4 +1,4 @@
-﻿// Commons.Core
+// Commons.Core
 //
 // Copyright (c) 2002-2015 Rafael 'Monoman' Teixeira, Managed Commons Team
 //
@@ -28,34 +28,29 @@ namespace Commons.Translation
 {
     public sealed class TranslationServiceLocaleLock : IDisposable
     {
-        static TranslationServiceLocaleLock()
-        {
-            _lock = new SemaphoreSlim(1, 1);
+        static TranslationServiceLocaleLock() => _lock = new SemaphoreSlim(1, 1);
 #if NET46
             AppDomain.CurrentDomain.DomainUnload += ProcessExit;
             AppDomain.CurrentDomain.ProcessExit += ProcessExit;
 #endif
-        }
 
-        public TranslationServiceLocaleLock(string locale)
-        {
+
+        public TranslationServiceLocaleLock(string locale) {
             _lock.Wait();
             _oldLocale = TranslationService.Locale;
             TranslationService.Locale = locale;
         }
 
-        public void Dispose()
-        {
+        public void Dispose() {
             TranslationService.Locale = _oldLocale;
             _lock.Release();
             GC.SuppressFinalize(this);
         }
 
-        static SemaphoreSlim _lock;
-        readonly string _oldLocale;
+        private static SemaphoreSlim _lock;
+        private readonly string _oldLocale;
 
-        static void ProcessExit(object sender, EventArgs e)
-        {
+        private static void ProcessExit(object sender, EventArgs e) {
             try {
                 var l = _lock;
                 if (l != null) {

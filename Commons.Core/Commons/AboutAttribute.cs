@@ -29,10 +29,7 @@ namespace Commons
     [AttributeUsage(AttributeTargets.Assembly)]
     public sealed class AboutAttribute : Attribute
     {
-        public AboutAttribute([Translatable] string details)
-        {
-            Details = details;
-        }
+        public AboutAttribute([Translatable] string details) => Details = details;
 
         public string Details { get; }
 

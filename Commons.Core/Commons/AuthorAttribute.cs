@@ -21,46 +21,16 @@
 // SOFTWARE.
 
 using System;
-using System.Linq;
-using System.Reflection;
-using Commons.Translation;
-using NUnit.Framework;
 
 namespace Commons
 {
-    [TestFixture]
-    public class AssemblyInformationTests
+    [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
+    public sealed class AuthorAttribute : Attribute
     {
-        [Test]
-        public void ToStringOnSimpleAssemblyInfo()
-        {
-            using (new TranslationServiceLocaleLock("en-US")) {
-                Assembly assembly = ThisAssembly;
-                var info = new AssemblyInformation(assembly);
-                var version = info.Version;
-                var expected = $@"
-Unit.Commons.Core  {version} - Copyright ©2002-2015 Rafael 'Monoman' Teixeira, Managed Commons Team
-Unit tests to core meta-information library
+        public AuthorAttribute(string name) => Name = name ?? throw new ArgumentNullException(nameof(name));
 
-License: MIT License - See https://opensource.org/licenses/MIT
+        public string Name { get; }
 
-Unit tests using NUnit
-Authors: Rafael 'Monoman' Teixeira, Managed Commons Team
-
-Additional info for testing purposes
-
-Please report bugs at <https://github.com/managed-commons/managed-commons-core/issues>
-";
-                Assert.AreEqual(expected.TrimStart('\r', '\n'), info.ToString());
-            }
-        }
-
-        static Assembly ThisAssembly =>
-#if NET46
-            typeof(AssemblyInformationTests).Assembly;
-#else
-            typeof(AssemblyInformationTests).GetTypeInfo().Assembly;
-
-#endif
+        public override string ToString() => $"Author: {Name}";
     }
 }
