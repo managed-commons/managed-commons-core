@@ -14,7 +14,7 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageReleaseNotes>Upgrade to .NET Standard 2.0</PackageReleaseNotes>
         <LangVersion>8</LangVersion>
-        <Version>2.0.0</Version>
+        <Version>2.0.1</Version>
         <PackageTags>translation metadata</PackageTags>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
