@@ -1,5 +1,7 @@
-Commons.Core
+Commons.Core *Retired*
 ==================
+
+**.NET BCL and Nuget now provides better metadata packaging**
 
 Managed Commons core library for assembly metadata and translation services.
 
